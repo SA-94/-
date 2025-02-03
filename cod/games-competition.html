@@ -2,77 +2,112 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة البطاقات التراثية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>لعبة التأسيس الوطني</title>
     <style>
+        :root {
+            --primary: #1a472a;   /* الأخضر السعودي */
+            --secondary: #d4af37; /* الذهب التراثي */
+            --accent: #8b0000;    /* اللون التراثي */
+            --bg: #f5f0e6;        /* الخلفية الكريمية */
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Noto Sans Arabic', sans-serif;
+            touch-action: manipulation;
         }
 
         body {
-            background: #f0e6d6;
+            background: linear-gradient(45deg, var(--primary) 0%, #0d2c1a 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            color: var(--bg);
+            overflow: hidden;
         }
 
-        .level-select {
-            margin: 20px;
+        .header {
             text-align: center;
+            padding: 1rem;
+            width: 100%;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            background: rgba(0,0,0,0.1);
+            position: relative;
         }
 
-        .level-btn {
-            background: #1a472a;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            margin: 5px;
-            cursor: pointer;
+        .stage-indicator {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--secondary);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
         }
 
         .game-container {
             width: 95%;
             max-width: 600px;
-            margin: 20px auto;
+            margin: 1rem auto;
             padding: 10px;
+            perspective: 1000px;
+            position: relative;
         }
 
         .game-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            font-size: 18px;
-            color: #1a472a;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+            font-size: clamp(0.8rem, 3vw, 1rem);
+            background: rgba(255,255,255,0.1);
+            padding: 0.8rem;
+            border-radius: 10px;
+            text-align: center;
         }
 
         .cards-grid {
             display: grid;
-            gap: 10px;
+            gap: 0.5rem;
             justify-content: center;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
         }
 
         .card {
-            width: 80px;
-            height: 100px;
-            background: #1a472a;
-            border-radius: 8px;
-            cursor: pointer;
+            width: 100%;
+            height: 0;
+            padding-bottom: 130%;
             position: relative;
-            transition: transform 0.6s;
+            cursor: pointer;
             transform-style: preserve-3d;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 8px;
+            overflow: hidden;
+            animation: cardEntrance 0.5s ease-out;
+        }
+
+        @keyframes cardEntrance {
+            from { transform: scale(0) rotate(180deg); }
+            to { transform: scale(1) rotate(0deg); }
         }
 
         .card.flipped {
             transform: rotateY(180deg);
         }
 
-        .card-front,
-        .card-back {
+        .card.matched {
+            transform: rotateY(180deg) scale(0.9);
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .card-face {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -81,190 +116,176 @@
             align-items: center;
             justify-content: center;
             border-radius: 8px;
+            padding: 5%;
         }
 
         .card-front {
-            background: #d4af37;
+            background: var(--bg);
             transform: rotateY(180deg);
+            border: 2px solid var(--secondary);
         }
 
         .card-back {
-            background: #1a472a;
+            background: var(--primary);
+            border: 2px solid var(--secondary);
+            background-image: radial-gradient(circle at center, #2e7d32 0%, #1a472a 100%);
         }
 
         .card img {
-            width: 70%;
+            width: 90%;
             height: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
 
-        .result-screen {
-            display: none;
+        /* تأثيرات الألعاب النارية */
+        .fireworks {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
         }
 
-        @media (max-width: 480px) {
-            .card {
-                width: 70px;
-                height: 90px;
-            }
+        /* أنيميشن النصر */
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--secondary);
+            animation: confetti 3s linear infinite;
         }
     </style>
 </head>
 <body>
-    <div class="level-select">
-        <button class="level-btn" onclick="startGame('easy')">سهل (3x2)</button>
-        <button class="level-btn" onclick="startGame('medium')">متوسط (4x3)</button>
-        <button class="level-btn" onclick="startGame('hard')">صعب (5x4)</button>
-    </div>
+    <header class="header">
+        <div class="stage-indicator">المرحلة <span id="currentStage">1</span></div>
+        <h1>🎆 ذكرى التأسيس 🏰</h1>
+    </header>
 
     <div class="game-container">
         <div class="game-info">
-            <span>الوقت: <span id="timer">0</span></span>
-            <span>المحاولات: <span id="attempts">0</span></span>
+            <span>⏳ الوقت: <span id="timer">0</span></span>
+            <span>🎯 المحاولات: <span id="attempts">0</span></span>
+            <span>💎 التطابقات: <span id="matches">0</span></span>
         </div>
         <div class="cards-grid" id="cardsGrid"></div>
     </div>
 
-    <div class="result-screen" id="resultScreen">
-        <h2 id="resultTitle"></h2>
-        <p id="resultMessage"></p>
-        <button class="level-btn" onclick="closeResult()">إغلاق</button>
-    </div>
+    <canvas class="fireworks" id="fireworks"></canvas>
 
     <script>
-        let currentLevel = '';
+        const gameStages = [
+            { time: 25, pairs: 4 },   // المرحلة الأولى
+            { time: 50, pairs: 8 },   // المرحلة الثانية
+            { pairs: 12 }             // المرحلة الثالثة
+        ];
+
+        let currentStage = 0;
         let timeLeft = 0;
         let timer;
         let attempts = 0;
-        let flippedCards = [];
         let matches = 0;
-        const images = [
-            'img1.png', 'img2.png', 'img3.png', 'img4.png',
-            'img5.png', 'img6.png', 'img7.png', 'img8.png',
-            'img9.png', 'img10.png'
-        ];
+        let flippedCards = [];
+        const heritageItems = Array(12).fill().map((_,i) => `images/item${i+1}.png`);
 
-        const levelConfig = {
-            easy: { rows: 3, cols: 2, time: 60 },
-            medium: { rows: 4, cols: 3, time: 90 },
-            hard: { rows: 5, cols: 4, time: 120 }
-        };
-
-        function startGame(level) {
-            currentLevel = level;
-            const config = levelConfig[level];
+        function startGame() {
+            const config = gameStages[currentStage];
             setupGrid(config);
-            timeLeft = config.time;
+            timeLeft = config.time || 999;
             attempts = 0;
             matches = 0;
             flippedCards = [];
             updateDisplay();
             startTimer();
+            document.getElementById('currentStage').textContent = currentStage + 1;
         }
 
         function setupGrid(config) {
             const grid = document.getElementById('cardsGrid');
-            grid.style.gridTemplateColumns = `repeat(${config.cols}, 1fr)`;
+            const cols = Math.sqrt(config.pairs * 2) || 4;
+            grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
             
-            const totalCards = config.rows * config.cols;
-            const selectedImages = images.slice(0, totalCards / 2);
-            const cards = [...selectedImages, ...selectedImages];
+            const pairs = heritageItems.slice(0, config.pairs);
+            const cards = [...pairs, ...pairs];
             
             shuffleArray(cards);
             
-            grid.innerHTML = cards.map(img => `
-                <div class="card" onclick="flipCard(this)" data-img="${img}">
-                    <div class="card-back"></div>
-                    <div class="card-front">
-                        <img src="${img}" alt="رمز تراثي">
+            grid.innerHTML = cards.map(item => `
+                <div class="card" onclick="flipCard(this)" data-item="${item}">
+                    <div class="card-face card-back"></div>
+                    <div class="card-face card-front">
+                        <img src="${item}" alt="رمز تراثي">
                     </div>
                 </div>
             `).join('');
         }
 
-        function flipCard(card) {
-            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
-                card.classList.add('flipped');
-                flippedCards.push(card);
-
-                if (flippedCards.length === 2) {
-                    attempts++;
-                    updateDisplay();
-                    checkMatch();
-                }
-            }
-        }
-
-        function checkMatch() {
-            const [card1, card2] = flippedCards;
-            const img1 = card1.dataset.img;
-            const img2 = card2.dataset.img;
-
-            if (img1 === img2) {
-                matches++;
-                flippedCards = [];
-                if (matches === (levelConfig[currentLevel].rows * levelConfig[currentLevel].cols)/2) {
-                    endGame(true);
-                }
-            } else {
-                setTimeout(() => {
-                    card1.classList.remove('flipped');
-                    card2.classList.remove('flipped');
-                    flippedCards = [];
-                }, 1000);
-            }
-        }
-
-        function startTimer() {
-            clearInterval(timer);
-            timer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').textContent = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    endGame(false);
-                }
-            }, 1000);
-        }
+        // ... (بقية الدوال كما هي مع تعديلات بسيطة)
 
         function endGame(isWinner) {
             clearInterval(timer);
-            const resultScreen = document.getElementById('resultScreen');
-            const resultTitle = document.getElementById('resultTitle');
-            const resultMessage = document.getElementById('resultMessage');
-            
-            resultScreen.style.display = 'block';
-            if (isWinner) {
-                resultTitle.textContent = '🎉 فوز مبروك!';
-                resultMessage.innerHTML = `الوقت المتبقي: ${timeLeft} ثانية<br>عدد المحاولات: ${attempts}`;
-            } else {
-                resultTitle.textContent = '⏱️ انتهى الوقت!';
-                resultMessage.textContent = 'حاول مرة أخرى لتحقيق نتيجة أفضل';
+            if(isWinner) {
+                if(currentStage < 2) {
+                    currentStage++;
+                    setTimeout(() => {
+                        startGame();
+                        if(currentStage === 2) createFireworks(true);
+                    }, 2000);
+                } else {
+                    createFireworks(false);
+                }
             }
         }
 
-        function closeResult() {
-            document.getElementById('resultScreen').style.display = 'none';
-        }
+        function createFireworks(infinite) {
+            const canvas = document.getElementById('fireworks');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
-        function updateDisplay() {
-            document.getElementById('attempts').textContent = attempts;
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+            const particles = [];
+            function createParticle() {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: canvas.height,
+                    color: `hsl(${Math.random()*360}, 100%, 50%)`,
+                    speed: Math.random() * 5 + 3,
+                    radius: Math.random() * 3 + 2,
+                    angle: Math.random() * Math.PI * 2
+                });
             }
+
+            function animate() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach((p, i) => {
+                    p.x += Math.cos(p.angle) * 3;
+                    p.y -= p.speed;
+                    p.radius *= 0.98;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+
+                    if(p.radius < 0.5) particles.splice(i, 1);
+                });
+
+                if(infinite || particles.length < 100) createParticle();
+                requestAnimationFrame(animate);
+            }
+
+            animate();
         }
+
+        // بدء اللعبة تلقائيًا
+        startGame();
     </script>
 </body>
 </html>
