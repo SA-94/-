@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خريطة تفاعلية ليوم التأسيس</title>
+    <style>
+        :root {
+            --main-green: #1a472a; /* أخضر داكن ملكي */
+            --gold: #d4af37; /* ذهبي */
+            --light-beige: #f5f1e6; /* بيج فاتح */
+        }
+
+        body {
+            font-family: 'Noto Sans Arabic', Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(45deg, #1a472a, #2c5f2d);
+            color: var(--light-beige);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(to right, var(--gold), #ffffff);
+            -webkit-text-fill-color: transparent;
+        }
+
+        .map-container {
+            position: relative;
+            width: 90vw;
+            height: 80vh;
+            margin: 20px auto;
+            border: 3px solid var(--gold);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: var(--light-beige);
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .region-marker {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .region-marker:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(26, 71, 42, 0.95);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 25px;
+            width: 80%;
+            max-width: 600px;
+            display: none;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .popup-title {
+            font-size: 1.8em;
+            color: var(--gold);
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--light-beige);
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            background: rgba(212, 175, 55, 0.9);
+            border: none;
+            color: var(--main-green);
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .control-btn:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .map-container {
+                width: 95vw;
+                height: 70vh;
+            }
+            
+            .control-btn {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🗺️ رحلة عبر تاريخ المملكة | يوم التأسيس</h1>
+
+    <div class="map-container">
+        <svg id="map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+            <!-- الخريطة الأساسية -->
+            <image href="https://simplemaps.com/static/svg/country/sa/admin1/sa.svg" 
+                   width="1000" 
+                   height="1000"
+                   class="map-image" />
+
+            <!-- العلامات التفاعلية -->
+            <g class="region-marker" onclick="showPopup('الرياض', 'https://www.youtube.com/embed/DRRaAbpnwDg')">
+                <circle cx="500" cy="550" r="25" fill="var(--gold)" />
+                <text x="500" y="550" 
+                      fill="var(--main-green)" 
+                      font-size="30" 
+                      text-anchor="middle" 
+                      dy=".3em">🏰</text>
+            </g>
+
+            <!-- يمكن إضافة مناطق أخرى بنفس النمط -->
+        </svg>
+
+        <!-- أدوات التحكم -->
+        <div class="controls">
+            <button class="control-btn" onclick="zoomIn()">➕ تكبير</button>
+            <button class="control-btn" onclick="zoomOut()">➖ تصغير</button>
+        </div>
+    </div>
+
+    <!-- نافذة الفيديو -->
+    <div class="popup" id="popup">
+        <div class="popup-header">
+            <h2 class="popup-title" id="popupTitle">الرياض</h2>
+            <button class="close-btn" onclick="closePopup()">×</button>
+        </div>
+        <div class="video-container">
+            <iframe id="videoFrame" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        // إعدادات الخريطة
+        let scale = 1;
+        const zoomFactor = 0.2;
+        const maxScale = 3;
+        const minScale = 0.5;
+
+        // تأثيرات التكبير/التصغير
+        function zoomIn() {
+            if (scale < maxScale) {
+                scale += zoomFactor;
+                updateTransform();
+            }
+        }
+
+        function zoomOut() {
+            if (scale > minScale) {
+                scale -= zoomFactor;
+                updateTransform();
+            }
+        }
+
+        function updateTransform() {
+            document.getElementById('map').style.transform = `scale(${scale})`;
+        }
+
+        // نظام السحب
+        let isDragging = false;
+        let startPos = { x: 0, y: 0 };
+        let translate = { x: 0, y: 0 };
+
+        document.getElementById('map').addEventListener('mousedown', startDrag);
+        document.getElementById('map').addEventListener('touchstart', startDrag);
+
+        function startDrag(e) {
+            isDragging = true;
+            startPos = {
+                x: e.clientX || e.touches[0].clientX,
+                y: e.clientY || e.touches[0].clientY
+            };
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag);
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            const currentX = e.clientX || e.touches[0].clientX;
+            const currentY = e.clientY || e.touches[0].clientY;
+            
+            translate.x += (currentX - startPos.x) * (1/scale);
+            translate.y += (currentY - startPos.y) * (1/scale);
+            
+            startPos = { x: currentX, y: currentY };
+            applyTransform();
+        }
+
+        function endDrag() {
+            isDragging = false;
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('touchmove', drag);
+        }
+
+        function applyTransform() {
+            const map = document.getElementById('map');
+            map.style.transform = `
+                translate(${translate.x}px, ${translate.y}px)
+                scale(${scale})
+            `;
+        }
+
+        // نظام النوافذ
+        function showPopup(region, videoUrl) {
+            document.getElementById('popupTitle').textContent = region;
+            document.getElementById('videoFrame').src = videoUrl;
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('videoFrame').src = '';
+        }
+    </script>
+
+</body>
+</html>
