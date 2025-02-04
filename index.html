@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>يوم التأسيس</title>
   <style>
+    /* أسلوب عام للجسم */
     body, html {
       margin: 0;
       padding: 0;
@@ -14,25 +15,18 @@
       width: 100%;
     }
 
-    /* شاشة البداية */
+    /* شاشة البداية مع الصورة (6.png) كخلفية */
     #start-container {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      flex-direction: column;
       text-align: center;
       padding: 10% 5%;
-      background: url('images/background.gif') no-repeat center center fixed;
+      background: url('images/6.png') no-repeat center center fixed;
       background-size: cover;
       color: white;
-    }
-
-    #start-logo {
-      width: 30vw;
-      max-width: 250px;
-      height: auto;
-      margin-bottom: 20px;
     }
 
     #start-text {
@@ -64,14 +58,14 @@
       background-color: #825A3D;
     }
 
-    /* فيديو الخلفية */
+    /* شاشة عرض الفيديو مع الخلفية (6.png) */
     #video-container {
       display: none;
       justify-content: center;
       align-items: center;
       height: 100vh;
       width: 100%;
-      background: url('images/5.jpg') no-repeat center center fixed;
+      background: url('images/6.png') no-repeat center center fixed;
       background-size: cover;
       position: relative;
     }
@@ -102,16 +96,18 @@
       background-color: rgba(0, 0, 0, 0.9);
     }
 
-    /* تحسينات للأجهزة المحمولة */
+    /* تحسين العرض على الأجهزة المحمولة */
     @media (max-width: 480px) {
+      /* ضبط الخلفية لتكون طويلة وتمتد بارتفاع الشاشة */
       #start-container {
         padding: 0;
-        background: url('images/6.jpg') no-repeat center center fixed;
-        background-size: 100% 100%;
+        background: url('images/6.png') no-repeat center top fixed;
+        background-size: auto 100%;
       }
-
-      #start-logo {
-        width: 80vw;
+      
+      #video-container {
+        background: url('images/6.png') no-repeat center top fixed;
+        background-size: auto 100%;
       }
 
       #start-btn {
@@ -119,7 +115,12 @@
         padding: 0.8rem 1.2rem;
       }
 
+      /* تعديل موضع زر التخطي ليكون في الأعلى على اليسار */
       #skip-btn {
+        top: 10px;
+        bottom: auto;
+        right: auto;
+        left: 10px;
         font-size: 1rem;
         padding: 0.8rem 1.2rem;
       }
@@ -129,7 +130,7 @@
 <body>
   <!-- شاشة البداية -->
   <div id="start-container">
-    <img id="start-logo" src="images/6.png" alt="يوم التأسيس">
+    <!-- تم استخدام الصورة (6.png) كخلفية، لذا تم حذف وسم الصورة img -->
     <p id="start-text">يوم التأسيس</p>
     <p id="start-subtext">(زراعتنا يوم بدينا)</p>
     <p>كلية العلوم الزراعية والأغذية</p>
@@ -137,10 +138,10 @@
     <button id="start-btn">ابدأ العرض</button>
   </div>
 
-  <!-- عرض الفيديو -->
+  <!-- صفحة عرض الفيديو -->
   <div id="video-container">
     <video id="intro-video" playsinline>
-      <source src="images/1.mp4" type="video/mp4">
+      <source src="video/1.mp4" type="video/mp4">
       متصفحك لا يدعم تشغيل الفيديو.
     </video>
     <button id="skip-btn">تخطي الفيديو</button>
@@ -153,7 +154,7 @@
     const startBtn = document.getElementById("start-btn");
     const skipBtn = document.getElementById("skip-btn");
 
-    // بدء العرض
+    // بدء العرض عند النقر على زر "ابدأ العرض"
     startBtn.addEventListener("click", () => {
       startContainer.style.display = "none";
       videoContainer.style.display = "flex";
@@ -161,18 +162,18 @@
       video.play().catch(error => console.log('Error playing video:', error));
     });
 
-    // عند انتهاء الفيديو
+    // عند انتهاء الفيديو، الانتقال إلى الصفحة التالية
     video.addEventListener("ended", () => {
       window.location.href = "next-page.html";
     });
 
-    // زر التخطي
+    // زر التخطي للتوقف عن عرض الفيديو والانتقال إلى الصفحة التالية
     skipBtn.addEventListener("click", () => {
       video.pause();
       window.location.href = "next-page.html";
     });
 
-    // إدارة حالة الصوت
+    // تبديل حالة كتم الصوت عند النقر على الصفحة
     document.addEventListener('click', () => {
       if(video.readyState > 0) {
         video.muted = !video.muted;
