@@ -19,7 +19,7 @@
       background-size: cover;
       min-height: 100vh;
       position: relative;
-      padding-bottom: 60px;
+      padding-bottom: 120px; /* مساحة للعداد */
     }
 
     /* الهيدر المعدل */
@@ -55,7 +55,7 @@
       height: 4px;
       background: #cbce30;
       margin: 4px 0;
-      transition: 5s;
+      transition: 0.5s;
       border-radius: 2px;
     }
 
@@ -110,6 +110,17 @@
       text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
     }
 
+    /* عداد الزوار */
+    .visitor-counter {
+      margin-top: 2rem;
+      font-size: 1.1rem;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+    }
+
     /* حقوق النشر المعدلة */
     footer {
       background: rgba(0, 0, 0, 0.7);
@@ -153,15 +164,26 @@
   <main class="main-content">
     <h1>مرحبًا بكم في فعاليات يوم التأسيس</h1>
     <p>انطلقوا معنا في رحلة تاريخية مميزة</p>
+    
+    <!-- قسم إضافي للمحتوى: مثال على تايمر تنازلي -->
+    <div class="countdown-timer" style="margin-top:2rem; font-size:1.2rem;">
+      <p>الفعالية تبدأ خلال:</p>
+      <div id="timer">00:00:00:00</div>
+    </div>
+    
+    <!-- عداد الزوار -->
+    <div class="visitor-counter">
+      عدد الزوار: <span id="visitorCount">0</span>
+    </div>
   </main>
 
   <div class="sidebar" id="sidebar">
     <h2>الفعاليات</h2>
     <ul>
-      <li><a href="cod/historical-event.html"> خريطة المملكة</a></li>
+      <li><a href="cod/historical-event.html">خريطة المملكة</a></li>
       <li><a href="cod/heritage-show.html">عروض تراثية</a></li>
       <li><a href="cod/cultural-competitions.html">مسابقات ثقافية</a></li>
-      <li><a href="cod/art-exhibitions.html">خلفية جوال </a></li>
+      <li><a href="cod/art-exhibitions.html">خلفية جوال</a></li>
       <li><a href="cod/theater-shows.html">من نحن</a></li>
       <li><a href="cod/games-competition.html">المسابقات التفاعلية</a></li>
     </ul>
@@ -172,6 +194,7 @@
   </footer>
 
   <script>
+    // دالة لتبديل ظهور الشريط الجانبي
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       sidebar.classList.toggle('active');
@@ -180,11 +203,46 @@
     document.addEventListener('click', function(e) {
       const sidebar = document.getElementById('sidebar');
       const menuIcon = document.querySelector('.menu-icon');
-      
       if (!sidebar.contains(e.target) && !menuIcon.contains(e.target)) {
         sidebar.classList.remove('active');
       }
     });
+
+    // مثال على تايمر تنازلي للفعالية (يمكنك تعديل التاريخ والوقت المناسب)
+    function startCountdown(endDate) {
+      const timer = document.getElementById('timer');
+      function updateTimer() {
+        const now = new Date().getTime();
+        const distance = endDate - now;
+        if (distance < 0) {
+          timer.innerHTML = "بدأت الفعالية!";
+          clearInterval(interval);
+          return;
+        }
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        timer.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+      }
+      updateTimer(); // التحديث الفوري
+      const interval = setInterval(updateTimer, 1000);
+    }
+    // تحديد تاريخ ووقت نهاية الفعالية (مثلاً 31 ديسمبر 2025)
+    const countdownDate = new Date("Dec 31, 2025 23:59:59").getTime();
+    startCountdown(countdownDate);
+
+    // مثال بسيط لعداد الزوار باستخدام LocalStorage (ملاحظة: هذا عداد محلي لكل متصفح وليس عداداً حقيقياً للموقع)
+    function updateVisitorCount() {
+      let count = localStorage.getItem('visitorCount');
+      if (!count) {
+        count = 0;
+      }
+      count = parseInt(count) + 1;
+      localStorage.setItem('visitorCount', count);
+      document.getElementById('visitorCount').textContent = count;
+    }
+    updateVisitorCount();
   </script>
 </body>
 </html>
