@@ -1,187 +1,242 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>من نحن - يوم التأسيس</title>
-    <style>
-        /* تنسيقات عامة */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            background-color: #f8f9fa;
-        }
-        
-        /* الهيدر الديناميكي */
-        .header {
-            background: linear-gradient(45deg, #1b5e20, #4caf50);
-            color: white;
-            text-align: center;
-            padding: 4rem 1rem;
-            transition: background 0.5s;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كلية العلوم الزراعية - يوم التأسيس</title>
+  <style>
+    :root {
+      --primary: #1a472a;   /* الأخضر السعودي */
+      --secondary: #d4af37; /* الذهب التراثي */
+      --accent: #8b0000;    /* اللون التراثي */
+      --bg: #f5f0e6;        /* الخلفية الكريمية */
+    }
 
-        /* المحتوى الرئيسي مع تأثير التمرير */
-        .main-content {
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 20px;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans Arabic', sans-serif;
+    }
 
-        /* بطاقات متناوبة */
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
+    body {
+      background: linear-gradient(45deg, var(--primary) 0%, #0d2c1a 100%);
+      color: var(--bg);
+      line-height: 1.8;
+      min-height: 100vh;
+      padding: 0.5rem;
+    }
 
-        .card:nth-child(odd) {
-            border-right: 5px solid #2e7d32;
-            transform: translateX(-30px);
-            animation: slideFromRight 0.8s ease-out;
-        }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 1rem;
+    }
 
-        .card:nth-child(even) {
-            border-left: 5px solid #81c784;
-            transform: translateX(30px);
-            animation: slideFromLeft 0.8s ease-out;
-        }
+    .header {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
 
-        @keyframes slideFromRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(-30px); opacity: 1; }
-        }
+    .header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50%" y="50%" fill="rgba(255,255,255,0.05)" font-size="30" text-anchor="middle" dominant-baseline="middle">🇸🇦</text></svg>');
+      z-index: -1;
+      animation: floatText 20s linear infinite;
+    }
 
-        @keyframes slideFromLeft {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(30px); opacity: 1; }
-        }
+    @keyframes floatText {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
 
-        .card:hover {
-            transform: translateX(0) scale(1.02);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
+    h1 {
+      font-size: 2.5rem;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
 
-        /* قسم الدكتور سلطان تفاعلي */
-        .dean-section {
-            background: linear-gradient(45deg, #e8f5e9, #c8e6c9);
-            border-radius: 15px;
-            padding: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            margin: 3rem 0;
-            transition: transform 0.3s;
-        }
+    h2 {
+      color: var(--secondary);
+      margin: 1.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--secondary);
+      font-size: 1.8rem;
+    }
 
-        .dean-section:hover {
-            transform: rotate(-2deg);
-        }
+    .content-card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-        /* فوتر متغير حسب الشاشة */
-        footer {
-            background: #2e7d32;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            transition: background 0.5s;
-        }
+    .content-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
 
-        @media (max-width: 768px) {
-            footer {
-                background: #1b5e20;
-            }
-            
-            .card:nth-child(odd),
-            .card:nth-child(even) {
-                transform: translateX(0);
-                border-left: none;
-                border-right: 5px solid #2e7d32;
-            }
-        }
-    </style>
+    ul {
+      list-style: none;
+      padding-right: 1rem;
+    }
+
+    li {
+      margin-bottom: 1rem;
+      padding-right: 1.5rem;
+      position: relative;
+    }
+
+    li::before {
+      content: "•";
+      color: var(--secondary);
+      position: absolute;
+      right: -0.8rem;
+      font-size: 1.5rem;
+    }
+
+    .degrees-section {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+
+    .degrees-section > div {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .patriotic-text {
+      color: var(--secondary);
+      font-weight: bold;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      0% { text-shadow: 0 0 5px var(--secondary); }
+      100% { text-shadow: 0 0 20px var(--secondary); }
+    }
+
+    /* زر الرجوع للصفحة الرئيسية */
+    .back-button {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--secondary);
+      color: var(--primary);
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      text-align: center;
+      transition: background 0.3s ease;
+    }
+
+    .back-button:hover {
+      background: #b38e2a;
+    }
+
+    /* تحسين التوافق مع الجوال */
+    @media (min-width: 600px) {
+      .degrees-section {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- الهيدر المعدل -->
-    <header class="header">
-        <h1>كلية علوم الزراعة والأغذية 🌾</h1>
-        <p>نَحْيي تراث الأجداد ونَبْني مستقبل الأجيال</p>
-    </header>
-
-    <!-- المحتوى الرئيسي -->
-    <div class="main-content">
-        <!-- بطاقة: تعريف الكلية -->
-        <div class="card">
-            <h2 style="color: #2e7d32;">مَن نحن؟</h2>
-            <p>
-                نحن <strong>فريق كلية علوم الزراعة والأغذية</strong> بجامعة الملك فيصل، 
-                صرح أكاديمي رائد تأسس عام ١٣٩٥هـ ليكون شريكًا فاعلًا في تحقيق 
-                <span style="color: #2e7d32;">رؤية المملكة 2030</span> في مجالات الأمن الغذائي 
-                والتنمية الزراعية المستدامة.
-            </p>
-        </div>
-
-        <!-- بطاقة: الرسالة -->
-        <div class="card">
-            <h2 style="color: #81c784;">رسالتنا</h2>
-            <p>
-                تقديم تعليم وبحوث علمية متميزة لإعداد كوادر قادرة على إدارة الموارد الزراعية 
-                وتطوير الصناعات الغذائية باستخدام التقنيات الحديثة، مع الحفاظ على الهوية الوطنية.
-            </p>
-        </div>
-
-        <!-- بطاقة: الرؤية -->
-        <div class="card">
-            <h2 style="color: #2e7d32;">رؤيتنا</h2>
-            <p>
-                الريادة العالمية في علوم الزراعة وإنتاج الأغذية من خلال شراكات مجتمعية 
-                وبحوث تطبيقية تواكب متطلبات العصر.
-            </p>
-        </div>
-
-        <div class="dean-section">
-            <img src="../images/dr-sultan.png" alt="الدكتور سلطان" style="width: 150px; border-radius: 50%;">
-            <div>
-                <h3 style="margin: 0; color: #2e7d32;">برعاية الأستاذ/ سلطان العويد </h3>
-                <p>رئيس الأنشطة الطلابية | قائد فريق فعاليات يوم التأسيس 2024</p>
-            </div>
-        </div>
+  <div class="container">
+    <div class="header">
+      <h1>يوم التأسيس السعودي</h1>
+      <p class="patriotic-text">"كلية العلوم الزراعية والأغذية - إرث مضيء ومستقبل واعد"</p>
+      <!-- زر الرجوع للصفحة الرئيسية -->
+      <a href="index.html" class="back-button">رجوع للصفحة الرئيسية</a>
     </div>
 
-    <!-- الفوتر التفاعلي -->
-    <footer>
-        <p>جامعة الملك فيصل - تصنيف عالمي في مجال الزراعة</p>
-        <p>هاشتاق الفعالية: #يوم_التأسيس_الزراعي_2024</p>
-    </footer>
+    <div class="content-card">
+      <h2>النشأة والتأسيس</h2>
+      <p>تأسست كلية العلوم الزراعية والأغذية مع تأسيس جامعة الملك فيصل عام 1395هـ/1975م، وكانت من أوائل الكليات التي بدأت بها الجامعة مسيرتها التعليمية، حيث استقبلت أول دفعة من الطلاب في خريف 1395هـ والطالبات في خريف 1398هـ.</p>
+    </div>
 
-    <script>
-        // تأثير تغيير لون الهيدر عند التمرير
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('.header');
-            const scrollY = window.scrollY;
-            
-            if (scrollY > 100) {
-                header.style.background = "linear-gradient(45deg, #1b5e20, #388e3c)";
-            } else {
-                header.style.background = "linear-gradient(45deg, #1b5e20, #4caf50)";
-            }
-        });
+    <div class="content-card">
+      <h2>الرؤية</h2>
+      <p>كلية رائدة محلياً وإقليمياً في إثراء المعرفة الزراعية وبناء القدرات البشرية، داعمة لتحقيق الأمن الغذائي والاستدامة البيئية.</p>
+    </div>
 
-        // تأثير اهتزاز البطاقات عند التمرير
-        const cards = document.querySelectorAll('.card');
-        window.addEventListener('scroll', () => {
-            cards.forEach(card => {
-                const cardTop = card.getBoundingClientRect().top;
-                if (cardTop < window.innerHeight - 100) {
-                    card.style.transform = 'translateX(0) scale(1)';
-                }
-            });
-        });
-    </script>
+    <div class="content-card">
+      <h2>الرسالة</h2>
+      <p>نُسهم بفعالية في توظيف المعرفة في القطاع الزراعي من خلال تقديم تعليم منتج ومؤهل للقدرات البشرية، وإنجاز بحوث علمية محفزة للتنمية الزراعية المستدامة، واستثمار فرص الابتكار وتنمية الأعمال، وبناء شراكة مجتمعية مثمرة محلياً وإقليمياً.</p>
+    </div>
+
+    <div class="content-card">
+      <h2>القيم</h2>
+      <ul>
+        <li>المواطنة المسؤولة</li>
+        <li>التكامل المرتكز على تعددية التخصصات</li>
+        <li>الابتكار في تأصيل المعرفة</li>
+        <li>الاحترام للتنوع الفكري</li>
+        <li>العدالة والشفافية</li>
+        <li>تمكين الكفاءات</li>
+        <li>الإتقان في الأداء</li>
+        <li>الالتزام بالشراكات</li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h2>الأهداف الاستراتيجية</h2>
+      <ul>
+        <li>تطوير برامج تعليمية معتمدة أكاديمياً</li>
+        <li>إعداد كوادر بشرية مؤهلة لسوق العمل</li>
+        <li>إنتاج بحوث علمية داعمة للقطاع الزراعي</li>
+        <li>تعزيز الشراكات مع المؤسسات الزراعية</li>
+        <li>تنمية الموارد المالية والاستثمارية</li>
+        <li>تحسين الأداء المؤسسي والأكاديمي</li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h2>الدرجات العلمية</h2>
+      <div class="degrees-section">
+        <div>
+          <h3>البكالوريوس:</h3>
+          <ul>
+            <li>الاقتصاد الزراعي التطبيقي</li>
+            <li>التقنية الحيوية النباتية</li>
+            <li>الثروة السمكية</li>
+            <li>علوم التغذية</li>
+            <li>علوم الدواجن</li>
+            <li>علوم المياه</li>
+            <li>هندسة التصنيع الغذائي</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>الماجستير:</h3>
+          <ul>
+            <li>علوم الإنتاج الحيواني</li>
+            <li>الاقتصاد التطبيقي</li>
+            <li>الهندسة الزراعية</li>
+            <li>علوم الأغذية وتقنياتها</li>
+            <li>تنمية الثروة السمكية</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
