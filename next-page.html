@@ -13,7 +13,6 @@
       padding: 0;
       font-family: 'Noto Naskh Arabic', sans-serif;
     }
-
     body {
       background: url('images/2.png') no-repeat center center fixed; /* تعديل المسار */
       background-size: cover;
@@ -21,7 +20,6 @@
       position: relative;
       padding-bottom: 120px; /* مساحة للعداد */
     }
-
     /* الهيدر المعدل */
     .header {
       background: rgba(150, 107, 59, 0.97);
@@ -36,19 +34,16 @@
       box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
       height: 60px;
     }
-
     .logo {
       height: 80px;
       width: auto;
     }
-
     /* أيقونة القائمة */
     .menu-icon {
       cursor: pointer;
       padding: 10px;
       z-index: 1001;
     }
-
     .menu-icon span {
       display: block;
       width: 30px;
@@ -58,7 +53,6 @@
       transition: 0.5s;
       border-radius: 2px;
     }
-
     /* الشريط الجانبي المعدل */
     .sidebar {
       position: fixed;
@@ -72,17 +66,14 @@
       color: rgb(255, 255, 255);
       transform: rotate(0deg);
     }
-
     .sidebar.active {
       right: 0;
       transform: rotate(360deg);
     }
-
     .sidebar ul {
       list-style: none;
       padding: 0;
     }
-
     .sidebar li {
       margin: 15px 0;
       padding: 10px;
@@ -90,17 +81,14 @@
       border-radius: 5px;
       transition: 0.3s;
     }
-
     .sidebar li:hover {
       background: rgba(255, 255, 255, 0.2);
     }
-
     .sidebar a {
       color: white;
       text-decoration: none;
       display: block;
     }
-
     /* المحتوى الرئيسي */
     .main-content {
       margin-top: 80px;
@@ -109,7 +97,6 @@
       text-align: center;
       text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
     }
-
     /* عداد الزوار */
     .visitor-counter {
       margin-top: 2rem;
@@ -120,7 +107,6 @@
       padding: 0.5rem 1rem;
       border-radius: 5px;
     }
-
     /* حقوق النشر المعدلة */
     footer {
       background: rgba(0, 0, 0, 0.7);
@@ -132,23 +118,57 @@
       width: 100%;
       font-size: 0.9rem;
     }
-
     /* التجاوب */
     @media (max-width: 768px) {
       .logo {
         height: 40px;
       }
-      
       .main-content {
         padding: 1rem;
         margin-top: 60px;
       }
-      
       .sidebar {
         width: 200px;
       }
     }
   </style>
+
+  <!-- كود Firebase باستخدام ES Modules -->
+  <script type="module">
+    // استيراد مكتبات Firebase من CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    // إعداد Firebase الخاص بمشروعك
+    const firebaseConfig = {
+      apiKey: "AIzaSyBkRbe4oaSGxLYIoPwsxJULEgD9UAblHWE",
+      authDomain: "project-6448861187697990424.firebaseapp.com",
+      projectId: "project-6448861187697990424",
+      storageBucket: "project-6448861187697990424.firebasestorage.app",
+      messagingSenderId: "1006911224145",
+      appId: "1:1006911224145:web:6f1dad42d5348662b47b70",
+      measurementId: "G-E6W70K7Z2H"
+    };
+
+    // تهيئة Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // دالة لتسجيل زيارة جديدة بزيادة العداد
+    const counterRef = ref(db, 'visitorCount');
+    runTransaction(counterRef, (currentValue) => {
+      return (currentValue || 0) + 1;
+    });
+
+    // تحديث عرض عدد الزوار في الصفحة عند تغير القيمة
+    onValue(counterRef, (snapshot) => {
+      const count = snapshot.val() || 0;
+      // انتظر تحميل الصفحة بالكامل قبل محاولة الوصول إلى العنصر
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById('visitorCount').textContent = count;
+      });
+    });
+  </script>
 </head>
 <body>
   <header class="header">
@@ -171,7 +191,7 @@
       <div id="timer">00:00:00:00</div>
     </div>
     
-    <!-- عداد الزوار -->
+    <!-- عداد الزوار سيتم تحديثه عبر Firebase -->
     <div class="visitor-counter">
       عدد الزوار: <span id="visitorCount">0</span>
     </div>
@@ -199,7 +219,7 @@
       const sidebar = document.getElementById('sidebar');
       sidebar.classList.toggle('active');
     }
-
+    // إخفاء الشريط الجانبي عند النقر خارج القائمة
     document.addEventListener('click', function(e) {
       const sidebar = document.getElementById('sidebar');
       const menuIcon = document.querySelector('.menu-icon');
@@ -208,7 +228,7 @@
       }
     });
 
-    // مثال على تايمر تنازلي للفعالية (يمكنك تعديل التاريخ والوقت المناسب)
+    // تايمر تنازلي للفعالية
     function startCountdown(endDate) {
       const timer = document.getElementById('timer');
       function updateTimer() {
@@ -231,18 +251,6 @@
     // تحديد تاريخ ووقت نهاية الفعالية (مثلاً 31 ديسمبر 2025)
     const countdownDate = new Date("Dec 31, 2025 23:59:59").getTime();
     startCountdown(countdownDate);
-
-    // مثال بسيط لعداد الزوار باستخدام LocalStorage (ملاحظة: هذا عداد محلي لكل متصفح وليس عداداً حقيقياً للموقع)
-    function updateVisitorCount() {
-      let count = localStorage.getItem('visitorCount');
-      if (!count) {
-        count = 0;
-      }
-      count = parseInt(count) + 1;
-      localStorage.setItem('visitorCount', count);
-      document.getElementById('visitorCount').textContent = count;
-    }
-    updateVisitorCount();
   </script>
 </body>
 </html>
