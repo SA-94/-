@@ -14,11 +14,11 @@
       font-family: 'Noto Naskh Arabic', sans-serif;
     }
     body {
-      background: url('images/2.png') no-repeat center center fixed; /* تعديل المسار */
+      background: url('images/2.png') no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
       position: relative;
-      padding-bottom: 120px; /* مساحة للعداد */
+      padding-bottom: 120px;
     }
     /* الهيدر المعدل */
     .header {
@@ -158,15 +158,32 @@
     const counterRef = ref(db, 'visitorCount');
     runTransaction(counterRef, (currentValue) => {
       return (currentValue || 0) + 1;
+    }).then(result => {
+      console.log("تم تحديث العداد، القيمة الجديدة:", result.snapshot.val());
+    }).catch(error => {
+      console.error("خطأ أثناء تحديث العداد:", error);
     });
 
-    // تحديث عرض عدد الزوار في الصفحة عند تغير القيمة
+    // دالة لتحديث العنصر بعد التأكد من جاهزية الـ DOM
+    function updateVisitorCountInDOM(count) {
+      const updateFn = () => {
+        const visitorElement = document.getElementById('visitorCount');
+        if (visitorElement) {
+          visitorElement.textContent = count;
+        }
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener("DOMContentLoaded", updateFn);
+      } else {
+        updateFn();
+      }
+    }
+
+    // تحديث عرض عدد الزوار عند تغير القيمة في قاعدة البيانات
     onValue(counterRef, (snapshot) => {
       const count = snapshot.val() || 0;
-      // انتظر تحميل الصفحة بالكامل قبل محاولة الوصول إلى العنصر
-      document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById('visitorCount').textContent = count;
-      });
+      updateVisitorCountInDOM(count);
     });
   </script>
 </head>
@@ -177,8 +194,8 @@
       <span></span>
       <span></span>
     </div>
-    <img src="images/4.png" alt="شعار يوم التأسيس" class="logo"> <!-- تعديل المسار -->
-    <img src="images/3.png" alt="شعار الجامعة" class="logo"> <!-- تعديل المسار -->
+    <img src="images/4.png" alt="شعار يوم التأسيس" class="logo">
+    <img src="images/3.png" alt="شعار الجامعة" class="logo">
   </header>
 
   <main class="main-content">
