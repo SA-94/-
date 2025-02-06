@@ -124,9 +124,7 @@
             <div class="timer">الوقت المتبقي: <span id="timer">50</span> ثانية</div>
         </div>
 
-        <div class="quiz-box" id="quiz-container">
-            <!-- سيتم توليد الأسئلة هنا بواسطة الجافاسكريبت -->
-        </div>
+        <div class="quiz-box" id="quiz-container"></div>
     </div>
 
     <div class="winner-box" id="winner-box">
@@ -143,15 +141,15 @@
 
     <div class="start-box" id="start-box">
         <h2>مرحبًا بك في مسابقة يوم التأسيس السعودي!</h2>
-        <p>سيتم عرض 10 أسئلة تاريخية، ولديك 50 ثانية للإجابة عليها. إذا أجبت على جميع الأسئلة بشكل صحيح، فستفوز بجائزة قيمة!</p>
+        <p>سيتم عرض 10 أسئلة تاريخية بشكل عشوائي، ولديك 50 ثانية للإجابة عليها.<br>إذا أجبت على جميع الأسئلة بشكل صحيح، فستفوز بجائزة قيمة!</p>
         <div class="start-button" onclick="startQuiz()">ابدأ المسابقة</div>
     </div>
 
     <canvas class="confetti" id="confetti-canvas"></canvas>
 
     <script>
-        // الأسئلة التاريخية ليوم التأسيس
-        const questions = [
+        // الأسئلة التاريخية (30 سؤال)
+        const allQuestions = [
             {
                 question: "في أي عام تم تأسيس الدولة السعودية الأولى؟",
                 options: ["1727", "1744", "1932", "1800"],
@@ -251,10 +249,66 @@
                 question: "ما هو الدور الذي لعبه الملك سعود في تاريخ المملكة؟",
                 options: ["تطوير التعليم", "تأسيس الجيش", "بناء الاقتصاد", "كل ما سبق"],
                 correct: 3
+            },
+            {
+                question: "ما اسم المعركة التي أنهت الدولة السعودية الأولى؟",
+                options: ["معركة الرياض", "معركة الدرعية", "معركة جدة", "معركة مكة"],
+                correct: 1
+            },
+            {
+                question: "كم عدد أئمة الدولة السعودية الأولى؟",
+                options: ["3", "4", "5", "6"],
+                correct: 1
+            },
+            {
+                question: "ما اسم القائد العثماني الذي هاجم الدرعية؟",
+                options: ["إبراهيم باشا", "محمد علي باشا", "سليمان باشا", "علي بك"],
+                correct: 0
+            },
+            {
+                question: "ما المدة التي استغرقها حصار الدرعية؟",
+                options: ["6 أشهر", "سنة واحدة", "5 سنوات", "6 سنوات"],
+                correct: 3
+            },
+            {
+                question: "أين توفي الإمام تركي بن عبدالله؟",
+                options: ["الرياض", "الدرعية", "عنيزة", "القصيم"],
+                correct: 0
+            },
+            {
+                question: "ما اسم نظام الحكم في الدولة السعودية الأولى؟",
+                options: ["ملكي", "جمهوري", "إمامة", "سلطنة"],
+                correct: 2
+            },
+            {
+                question: "ما العملة المستخدمة في الدولة السعودية الأولى؟",
+                options: ["الريال", "الجنيه", "القرش", "الدينار"],
+                correct: 2
+            },
+            {
+                question: "ما اسم التحالف الذي واجه الدولة السعودية الأولى؟",
+                options: ["تحالف المماليك", "تحالف العثمانيين", "تحالف القبائل", "تحالف البريطانيين"],
+                correct: 0
+            },
+            {
+                question: "ما اسم النظام الإداري الذي ابتكرته الدولة السعودية الأولى؟",
+                options: ["المناطق", "الإمارات", "الأقاليم", "المخافر"],
+                correct: 1
+            },
+            {
+                question: "ما أهم إنجاز اقتصادي للدولة السعودية الأولى؟",
+                options: ["تأسيس البنوك", "تنظيم التجارة", "اكتشاف النفط", "بناء الموانئ"],
+                correct: 1
             }
         ];
 
-        // دالة خلط العناصر
+        let currentQuestions = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 50;
+        let timerInterval;
+
+        // دالة خلط المصفوفة
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -262,31 +316,36 @@
             }
         }
 
-        // تحديث وترتيب الأسئلة وخياراتها مع الحفاظ على الإجابة الصحيحة
-        questions.forEach(q => {
-            const correctAnswer = q.options[q.correct]; // حفظ الإجابة الصحيحة
-            shuffleArray(q.options); // خلط الخيارات
-            q.correct = q.options.indexOf(correctAnswer); // تحديث الفهرس الصحيح
-        });
-
-        // خلط مصفوفة الأسئلة
-        shuffleArray(questions);
-
-        let currentQuestion = 0;
-        let score = 0;
-        let timeLeft = 50;
-        let timerInterval;
-
-        // عرض إطار بدء المسابقة
-        document.getElementById('start-box').style.display = 'block';
-
         function startQuiz() {
-            document.getElementById('start-box').style.display = 'none';
-            generateQuestion();
+            // إعادة تعيين المتغيرات
+            currentQuestion = 0;
+            score = 0;
+            timeLeft = 50;
+            document.getElementById('score').textContent = score;
+            document.getElementById('timer').textContent = timeLeft;
+
+            // توليد أسئلة عشوائية جديدة
+            const shuffledQuestions = [...allQuestions];
+            shuffleArray(shuffledQuestions);
+            currentQuestions = shuffledQuestions.slice(0, 10);
+
+            // خلط الخيارات لكل سؤال
+            currentQuestions.forEach(q => {
+                const correctAnswer = q.options[q.correct];
+                shuffleArray(q.options);
+                q.correct = q.options.indexOf(correctAnswer);
+            });
+
+            // بدء المؤقت
+            clearInterval(timerInterval);
             startTimer();
+
+            // إظهار الواجهة
+            document.getElementById('start-box').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            generateQuestion();
         }
 
-        // بدء المؤقت
         function startTimer() {
             timerInterval = setInterval(() => {
                 timeLeft--;
@@ -299,12 +358,9 @@
             }, 1000);
         }
 
-        // اختيار أول 10 أسئلة من المصفوفة العشوائية
-        const selectedQuestions = questions.slice(0, 10);
-
         function generateQuestion() {
             const quizContainer = document.getElementById('quiz-container');
-            const q = selectedQuestions[currentQuestion];
+            const q = currentQuestions[currentQuestion];
             
             let html = `
                 <div class="question">${q.question}</div>
@@ -316,37 +372,40 @@
             html += `</div>`;
             quizContainer.innerHTML = html;
         }
-
         function checkAnswer(selected) {
-            const correctAnswer = selectedQuestions[currentQuestion].correct;
-            const options = document.querySelectorAll('.option');
+    const correctAnswer = currentQuestions[currentQuestion].correct;
+    const options = document.querySelectorAll('.option');
 
-            options.forEach((option, index) => {
-                if (index === correctAnswer) {
-                    option.style.background = '#4CAF50';
-                } else {
-                    option.style.background = '#f44336';
-                }
-                option.style.pointerEvents = 'none';
-            });
-
-            if (selected === correctAnswer) {
-                score++;
-                document.getElementById('score').textContent = score;
-            } else {
-                showResult(false);
-                return;
-            }
-
-            setTimeout(() => {
-                currentQuestion++;
-                if (currentQuestion < selectedQuestions.length) {
-                    generateQuestion();
-                } else {
-                    showResult(true);
-                }
-            }, 1500);
+    // تعطيل النقر على الخيارات وتلوين الإجابات
+    options.forEach((option, index) => {
+        option.style.pointerEvents = 'none';
+        if (index === correctAnswer) {
+            option.style.background = '#4CAF50';
+        } else {
+            option.style.background = '#f44336';
         }
+    });
+
+    // إذا كانت الإجابة صحيحة نستمر في المسابقة
+    if (selected === correctAnswer) {
+        score++;
+        document.getElementById('score').textContent = score;
+        setTimeout(() => {
+            currentQuestion++;
+            if (currentQuestion < currentQuestions.length) {
+                generateQuestion();
+            } else {
+                showResult(true);
+            }
+        }, 1500);
+    } else {
+        // إذا كانت الإجابة خاطئة، نوقف المؤقت ونعرض رسالة الخسارة مباشرة بعد تأخير بسيط
+        setTimeout(() => {
+            showResult(false);
+        }, 1500);
+    }
+}
+
 
         function showResult(isWinner) {
             clearInterval(timerInterval);
@@ -360,11 +419,7 @@
 
         function retryQuiz() {
             document.getElementById('loser-box').style.display = 'none';
-            currentQuestion = 0;
-            score = 0;
-            timeLeft = 50;
-            document.getElementById('score').textContent = score;
-            document.getElementById('timer').textContent = timeLeft;
+            document.getElementById('winner-box').style.display = 'none';
             startQuiz();
         }
 
@@ -410,6 +465,9 @@
 
             animate();
         }
+
+        // بدء التطبيق
+        document.getElementById('start-box').style.display = 'block';
     </script>
 </body>
 </html>
