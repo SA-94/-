@@ -12,12 +12,6 @@
       --sand: #EFEBE9;
     }
 
-    /* منع التمرير أثناء السحب */
-    body.dragging {
-      touch-action: none;
-      overflow: hidden;
-    }
-
     body {
       font-family: 'Noto Sans Arabic', Tahoma, sans-serif;
       margin: 0;
@@ -101,8 +95,8 @@
 
     .controls {
       position: absolute;
-      bottom: 20px;
-      right: 20px;
+      bottom: 15px;
+      right: 15px;
       display: flex;
       gap: 0.8rem;
       z-index: 100;
@@ -140,15 +134,13 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 95%;
-      max-width: 500px;
-      max-height: 90vh;
+      width: 90%;
+      max-width: 600px;
       background: rgba(93, 64, 55, 0.98);
       border: 3px solid var(--gold);
       border-radius: 20px;
       padding: 1.5rem;
       display: none;
-      overflow-y: auto;
       z-index: 1000;
     }
 
@@ -230,7 +222,7 @@
   </header>
 
   <div class="map-container">
-    <img id="map-image" src="images/map.png" alt="خريطة التأسيس التاريخية" />
+    <img id="map-image" src="../images/map.png" alt="الخريطة" />
     
     <div class="controls">
       <button class="control-btn" onclick="zoomIn()">➕ تكبير</button>
@@ -308,7 +300,6 @@
     // نظام السحب المحسن
     function startDrag(e) {
       isDragging = true;
-      document.body.classList.add('dragging');
       startPos = {
         x: e.clientX || e.touches[0].clientX,
         y: e.clientY || e.touches[0].clientY
@@ -333,7 +324,6 @@
 
     function endDrag() {
       isDragging = false;
-      document.body.classList.remove('dragging');
       document.removeEventListener('mousemove', drag);
       document.removeEventListener('touchmove', drag);
     }
