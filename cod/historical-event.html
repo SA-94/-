@@ -45,7 +45,7 @@
       overflow: hidden;
       background: var(--sand);
       box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-      aspect-ratio: 988/901; /* نسبة أبعاد الصورة */
+      aspect-ratio: 988/901;
     }
 
     #map-image {
@@ -62,7 +62,7 @@
     .sidebar {
       width: 95vw;
       margin: 1rem auto;
-      padding: 1.5rem;
+      padding: 1rem;
       background: rgba(93, 64, 55, 0.95);
       border: 2px solid var(--gold);
       border-radius: 15px;
@@ -71,20 +71,21 @@
 
     .region-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1rem;
+      /* تقليل الحد الأدنى لعرض العمود وتضييق الفجوات */
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.5rem;
       padding: 0;
       list-style: none;
     }
 
     .region-item {
-      padding: 1rem;
+      padding: 0.5rem;         /* تقليل الحشوة */
       background: linear-gradient(45deg, var(--earth2), var(--earth1));
       border: 1px solid var(--gold);
-      border-radius: 15px;
+      border-radius: 10px;       /* تقليل انحناء الحواف */
       color: var(--sand);
       text-align: center;
-      font-size: 1rem;
+      font-size: 0.9rem;         /* تقليل حجم الخط */
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
@@ -180,7 +181,6 @@
       overflow: hidden;
     }
 
-    /* عنصر الفيديو المحلي */
     .video-player {
       position: absolute;
       top: 0;
@@ -191,7 +191,6 @@
       display: block;
     }
     
-    /* عنصر فيديو اليوتيوب */
     .youtube-player {
       position: absolute;
       top: 0;
@@ -247,7 +246,6 @@
 
   <div class="sidebar">
     <ul class="region-list">
-      <!-- استبدال فيديو الدرعية بفيديو اليوتيوب -->
       <li class="region-item" data-video="https://www.youtube.com/watch?v=8PDgymJJ4OI" onclick="showPopup('حين ولد المستقبل', this.dataset.video)">
         الدرعية التاريخية
       </li>
@@ -273,12 +271,10 @@
       <button class="close-btn" onclick="closePopup()">×</button>
     </div>
     <div class="video-container">
-      <!-- فيديو العرض المحلي -->
       <video class="video-player" id="videoPlayer" controls>
         <source id="videoSource" type="video/mp4">
         المتصفح لا يدعم تشغيل الفيديو
       </video>
-      <!-- عنصر فيديو اليوتيوب -->
       <iframe class="youtube-player" id="youtubePlayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
@@ -325,7 +321,7 @@
         y: e.clientY || e.touches[0].clientY
       };
       document.addEventListener('mousemove', drag);
-      // استخدم { passive: false } للسماح باستخدام e.preventDefault()
+      // استخدام { passive: false } للسماح باستخدام e.preventDefault()
       document.addEventListener('touchmove', drag, { passive: false });
       document.addEventListener('mouseup', endDrag);
       document.addEventListener('touchend', endDrag);
