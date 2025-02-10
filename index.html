@@ -5,126 +5,131 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>يوم التأسيس</title>
   <style>
+    /* الأساسيات */
     body, html {
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      overflow: auto;
       font-family: 'Ruqaa', sans-serif;
       height: 100%;
       width: 100%;
     }
-    
-    /* تحسين الهيدر */
+
+    /* الهيدر */
     #header-container {
       position: relative;
       width: 100%;
       text-align: center;
-      padding: 1rem 0;
+      padding: 0.5rem 0;
       background: transparent;
     }
-    
-    /* تحجيم الصورة بشكل أنسب */
+
     #college-logo {
-      max-width: 90%;
+      width: 85%;
+      max-width: 400px;
       height: auto;
-      max-height: 180px;
-      object-fit: contain;
+      padding: 0 5%;
     }
-    
-    /* تحسين شاشة البداية */
+
+    /* شاشة البداية */
     #start-container {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
-      background: url('images/6.png') no-repeat center center fixed;
-      background-size: cover;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/6.png') no-repeat center center/cover;
       color: white;
-      padding: 0 1rem;
-    }
-    
-    /* تحسين النصوص */
-    #start-text, #start-subtext, #start-container p {
-      font-size: 2.2rem;
-      line-height: 1.3;
-      margin: 0.5rem 0;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      padding: 1rem;
+      box-sizing: border-box;
     }
 
+    /* النصوص */
     #start-text {
-      color: #fff;
-      margin-top: 2rem;
+      font-size: 6vw;
+      margin: 1rem 0 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     }
 
     #start-subtext {
-      color: #f8f8f8;
-      font-size: 1.8rem;
+      font-size: 4.5vw;
+      margin: 0.5rem 0;
     }
 
     #start-container p {
-      color: #eee;
-      font-size: 1.6rem;
+      font-size: 4vw;
+      margin: 0.5rem 0 1rem;
     }
 
-    /* تحسين الزر الرئيسي */
+    /* زر البداية */
     #start-btn {
       background-color: #A67C52;
       color: white;
-      padding: 1.2rem 2rem;
+      padding: 1rem 1.5rem;
       border: none;
       border-radius: 25px;
       cursor: pointer;
-      font-size: 1.6rem;
-      margin: 2rem 0;
+      font-size: 4.5vw;
+      margin: 1rem 0;
+      width: 80%;
+      max-width: 300px;
       box-shadow: 0 4px 15px rgba(166, 124, 82, 0.4);
-      width: auto;
-      min-width: 220px;
       transition: transform 0.3s ease;
     }
 
-    #start-btn:hover {
-      transform: scale(1.05);
-    }
-    
-    /* تحسين شاشة الفيديو */
+    /* شاشة الفيديو */
     #video-container {
       display: none;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      background: url('images/6.png') no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
+      height: 100%;
+      background: black;
+      z-index: 1000;
     }
-    
+
     video {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
-    
-    /* تحسين زر التخطي */
+
+    /* زر التخطي */
     #skip-btn {
-      position: absolute;
-      bottom: 30px;
-      left: 30px;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       background-color: rgba(166, 124, 82, 0.9);
       color: white;
-      padding: 0.8rem 1.5rem;
+      padding: 0.6rem 1.2rem;
       border: 2px solid #fff;
-      border-radius: 25px;
-      font-size: 1.4rem;
+      border-radius: 20px;
+      font-size: 3.5vw;
       cursor: pointer;
-      backdrop-filter: blur(2px);
-      transition: all 0.3s ease;
+      z-index: 1001;
+      min-width: 120px;
+      text-align: center;
     }
 
-    #skip-btn:hover {
-      background-color: rgba(166, 124, 82, 1);
-      box-shadow: 0 0 15px rgba(166, 124, 82, 0.8);
+    /* تحسينات للشاشات الصغيرة */
+    @media (max-width: 480px) {
+      #college-logo {
+        max-width: 250px;
+      }
+
+      #start-btn {
+        font-size: 5.5vw;
+        padding: 0.8rem 1.2rem;
+      }
+
+      #skip-btn {
+        font-size: 4.5vw;
+        bottom: 15px;
+        padding: 0.5rem 1rem;
+      }
     }
   </style>
 </head>
@@ -149,7 +154,33 @@
   </div>
   
   <script>
-    // ... (نفس الكود السابق بدون تغيير)
+    const startContainer = document.getElementById("start-container");
+    const videoContainer = document.getElementById("video-container");
+    const video = document.getElementById("intro-video");
+    const startBtn = document.getElementById("start-btn");
+    const skipBtn = document.getElementById("skip-btn");
+
+    startBtn.addEventListener("click", () => {
+      startContainer.style.display = "none";
+      videoContainer.style.display = "block";
+      video.muted = false;
+      video.play().catch(error => console.log('Error playing video:', error));
+    });
+
+    video.addEventListener("ended", () => {
+      window.location.href = "next-page.html";
+    });
+
+    skipBtn.addEventListener("click", () => {
+      video.pause();
+      window.location.href = "next-page.html";
+    });
+
+    // تعديل حجم الفيديو عند تغيير اتجاه الشاشة
+    window.addEventListener('resize', () => {
+      video.style.height = window.innerHeight + 'px';
+      video.style.width = 'auto';
+    });
   </script>
 </body>
 </html>
