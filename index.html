@@ -5,122 +5,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>يوم التأسيس</title>
   <style>
+    /* الأساسيات */
     body, html {
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      overflow: auto;
       font-family: 'Ruqaa', sans-serif;
       height: 100%;
       width: 100%;
     }
-    
-    /* الصورة في أعلى الشاشة */
+
+    /* الهيدر */
     #header-container {
-      position: absolute;
-      top: 0;
+      position: relative;
       width: 100%;
       text-align: center;
-      z-index: 10;
+      padding: 0.5rem 0;
       background: transparent;
     }
-    
-    /* جعل الصورة ملائمة للشاشة */
+
     #college-logo {
-      width: 100%;
+      width: 85%;
+      max-width: 400px;
       height: auto;
-      max-height: 250px; /* زيادة حجم الصورة */
+      padding: 0 5%;
     }
-    
+
     /* شاشة البداية */
     #start-container {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
-      padding-top: 180px; /* رفع النصوص */
-      background: url('images/6.png') no-repeat center center fixed;
-      background-size: cover;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/6.png') no-repeat center center/cover;
       color: white;
-    }
-    
-    #start-text, #start-subtext, #start-container p {
-      font-family: 'Ruqaa', sans-serif;
-      font-size: 2.5rem; /* زيادة حجم الخط */
-      font-weight: bold;
-      line-height: 1.1; /* تقليل التباعد بين الأسطر */
-      margin: 10px 0; /* تقليل المسافة بين الجمل */
+      padding: 1rem;
+      box-sizing: border-box;
     }
 
-    /* تحسين اللون لجعل النص أكثر وضوحًا */
+    /* النصوص */
     #start-text {
-      color: #fff; /* زيادة وضوح النص */
+      font-size: 6vw;
+      margin: 1rem 0 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     }
 
     #start-subtext {
-      color: #f1f1f1; /* تغيير اللون لجعل النص متباينًا */
+      font-size: 4.5vw;
+      margin: 0.5rem 0;
     }
 
     #start-container p {
-      color: #dcdcdc; /* جعل النص أفتح */
+      font-size: 4vw;
+      margin: 0.5rem 0 1rem;
     }
 
+    /* زر البداية */
     #start-btn {
       background-color: #A67C52;
       color: white;
-      padding: 1.5rem 2.5rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 1.8rem; /* زيادة حجم الخط */
-      margin-top: 30px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      width: 80%;
-      max-width: 300px;
-    }
-    
-    /* شاشة عرض الفيديو */
-    #video-container {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100%;
-      background: url('images/6.png') no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-    }
-    
-    video {
-      width: 100%;
-      max-height: 100%;
-      object-fit: cover;
-    }
-    
-    /* زر التخطي أسفل الفيديو */
-    #skip-btn {
-      position: absolute;
-      bottom: 800px;
-      right: 10px;
-      background-color: rgba(0, 0, 0, 0.225);
-      color: rgb(255, 255, 255);
       padding: 1rem 1.5rem;
       border: none;
-      border-radius: 8px;
-      font-size: 1.5rem; /* زيادة حجم الخط */
+      border-radius: 25px;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 4.5vw;
+      margin: 1rem 0;
+      width: 80%;
+      max-width: 300px;
+      box-shadow: 0 4px 15px rgba(166, 124, 82, 0.4);
+      transition: transform 0.3s ease;
     }
-    
-    #skip-btn:hover {
-      background-color: rgba(0, 0, 0, 0.9);
+
+    /* شاشة الفيديو */
+    #video-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      z-index: 1000;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* زر التخطي */
+    #skip-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(166, 124, 82, 0.9);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border: 2px solid #fff;
+      border-radius: 20px;
+      font-size: 3.5vw;
+      cursor: pointer;
+      z-index: 1001;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    /* تحسينات للشاشات الصغيرة */
+    @media (max-width: 480px) {
+      #college-logo {
+        max-width: 250px;
+      }
+
+      #start-btn {
+        font-size: 5.5vw;
+        padding: 0.8rem 1.2rem;
+      }
+
+      #skip-btn {
+        font-size: 4.5vw;
+        bottom: 15px;
+        padding: 0.5rem 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <div id="header-container">
-    <img src="../يوم التاسيس/images/agri-icon.png" alt="كلية العلوم الزراعية والأغذية" id="college-logo">
+    <img src="images/agri-icon.png" alt="كلية العلوم الزراعية والأغذية" id="college-logo">
   </div>
   
   <div id="start-container">
@@ -144,21 +159,27 @@
     const video = document.getElementById("intro-video");
     const startBtn = document.getElementById("start-btn");
     const skipBtn = document.getElementById("skip-btn");
-  
+
     startBtn.addEventListener("click", () => {
       startContainer.style.display = "none";
-      videoContainer.style.display = "flex";
+      videoContainer.style.display = "block";
       video.muted = false;
       video.play().catch(error => console.log('Error playing video:', error));
     });
-  
+
     video.addEventListener("ended", () => {
       window.location.href = "next-page.html";
     });
-  
+
     skipBtn.addEventListener("click", () => {
       video.pause();
       window.location.href = "next-page.html";
+    });
+
+    // تعديل حجم الفيديو عند تغيير اتجاه الشاشة
+    window.addEventListener('resize', () => {
+      video.style.height = window.innerHeight + 'px';
+      video.style.width = 'auto';
     });
   </script>
 </body>
