@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>لعبة الذاكرة اللونية</title>
+  <title>لعبة الذاكرة اللونية - يوم التأسيس</title>
   <style>
     :root {
-      --primary: #1a472a;
-      --secondary: #d4af37;
-      --accent: #8b0000;
-      --bg: #f5f0e6;
+      --primary: #006400;      /* أخضر غامق */
+      --secondary: #FFFFFF;    /* أبيض */
+      --accent: #D4AF37;       /* لمسة ذهبية */
+      --bg: #F0F0F0;           /* خلفية فاتحة */
     }
 
     * {
@@ -21,7 +21,7 @@
     }
 
     body {
-      background: linear-gradient(45deg, var(--primary) 0%, #0d2c1a 100%);
+      background: linear-gradient(45deg, #006400 0%, #008000 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -134,7 +134,7 @@
     .card-back {
       background: var(--primary);
       border: 3px solid var(--secondary);
-      background-image: radial-gradient(circle at center, #2e7d32 0%, #1a472a 100%);
+      background-image: radial-gradient(circle at center, #007F00 0%, #005500 100%);
     }
 
     .card-number {
@@ -181,7 +181,7 @@
 <body>
   <header class="header">
       <div class="stage-indicator">المرحلة <span id="currentStage">1</span></div>
-      <h1>🎨 ذاكرة الألوان 🎲</h1>
+      <h1>🎨 ذاكرة الألوان - يوم التأسيس 🎲</h1>
   </header>
 
   <div class="game-container">
@@ -200,26 +200,27 @@
   </div>
 
   <script>
-    // التعديلات في الجافاسكريبت
+    // إعداد المراحل: الوقت وعدد الأزواج
     const gameStages = [
       { time: 30, pairs: 4 },
       { time: 60, pairs: 6 },
       { time: 90, pairs: 8 }
     ];
 
+    // لوحة الألوان المخصصة ليوم التأسيس (معظمها درجات من اللون الأخضر مع إضافة الأبيض والذهبي)
     const colorPalette = [
-      { color: '#FF6B6B', number: '١' },
-      { color: '#4ECDC4', number: '٢' },
-      { color: '#45B7D1', number: '٣' },
-      { color: '#96CEB4', number: '٤' },
-      { color: '#FFEEAD', number: '٥' },
-      { color: '#D4A5A5', number: '٦' },
-      { color: '#9B59B6', number: '٧' },
-      { color: '#E74C3C', number: '٨' },
-      { color: '#2ECC71', number: '٩' },
-      { color: '#F1C40F', number: '١٠' },
-      { color: '#E67E22', number: '١١' },
-      { color: '#34495E', number: '١٢' }
+      { color: '#006400', number: '١' },  // أخضر غامق
+      { color: '#008000', number: '٢' },
+      { color: '#228B22', number: '٣' },
+      { color: '#2E8B57', number: '٤' },
+      { color: '#3CB371', number: '٥' },
+      { color: '#66CDAA', number: '٦' },
+      { color: '#20B2AA', number: '٧' },
+      { color: '#00FA9A', number: '٨' },
+      { color: '#00FF7F', number: '٩' },
+      { color: '#7FFF00', number: '١٠' },
+      { color: '#FFFFFF', number: '١١' },  // أبيض
+      { color: '#D4AF37', number: '١٢' }   // ذهبي
     ];
 
     let currentStage = 0;
@@ -246,8 +247,9 @@
       const baseCols = Math.ceil(Math.sqrt(config.pairs * 2));
       const cols = baseCols + Math.floor(Math.random() * 2);
       
-      // إضافة حجم أدنى للبطاقات
-      grid.style.gridTemplateColumns = `repeat(${cols}, minmax(80px, 1fr))`;
+      // ضبط حجم أدنى للبطاقات بناءً على عرض الجهاز (الجوال أو غيره)
+      const minCardSize = window.innerWidth < 480 ? 60 : 80;
+      grid.style.gridTemplateColumns = `repeat(${cols}, minmax(${minCardSize}px, 1fr))`;
       
       const pairs = colorPalette.slice(0, config.pairs);
       const cards = [...pairs, ...pairs];
@@ -267,7 +269,6 @@
       `).join('');
     }
 
-    // التأكد من وجود دالة flipCard
     function flipCard(card) {
       if (card.classList.contains('flipped') || 
           card.classList.contains('matched') || 
