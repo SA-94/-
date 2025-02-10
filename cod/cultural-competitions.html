@@ -1,473 +1,486 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مسابقة يوم التأسيس السعودي</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مسابقة يوم التأسيس السعودي</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-            background: linear-gradient(45deg, #00563B, #1C6456);
-            min-height: 100vh;
-            color: #fff;
-        }
+    body {
+      background: linear-gradient(45deg, #00563B, #1C6456);
+      min-height: 100vh;
+      color: #fff;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
-        .header {
-            text-align: center;
-            padding: 2rem;
-            border-bottom: 2px solid #F7DF1E;
-        }
+    .header {
+      text-align: center;
+      padding: 2rem;
+      border-bottom: 2px solid #F7DF1E;
+    }
 
-        .quiz-box {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            backdrop-filter: blur(10px);
-        }
+    .quiz-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      backdrop-filter: blur(10px);
+    }
 
-        .question {
-            font-size: 1.4rem;
-            margin-bottom: 1.5rem;
-        }
+    .question {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
 
-        .options {
-            display: grid;
-            gap: 1rem;
-        }
+    .options {
+      display: grid;
+      gap: 1rem;
+    }
 
-        .option {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+    .option {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
 
-        .option:hover {
-            background: #F7DF1E;
-            color: #00563B;
-        }
+    .option:hover {
+      background: #F7DF1E;
+      color: #00563B;
+    }
 
-        .score {
-            text-align: center;
-            font-size: 1.2rem;
-            margin: 1rem 0;
-        }
+    .score {
+      text-align: center;
+      font-size: 1.2rem;
+      margin: 1rem 0;
+    }
 
-        .timer {
-            text-align: center;
-            font-size: 1.5rem;
-            margin: 1rem 0;
-            color: #F7DF1E;
-        }
+    .timer {
+      text-align: center;
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      color: #F7DF1E;
+    }
 
-        .confetti {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 999;
-        }
+    .confetti {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
 
-        .winner-box, .loser-box, .start-box {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            color: #00563B;
-            padding: 3rem;
-            border-radius: 15px;
-            text-align: center;
-            z-index: 1000;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
+    .winner-box, .loser-box, .start-box {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      color: #00563B;
+      padding: 3rem;
+      border-radius: 15px;
+      text-align: center;
+      z-index: 1000;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
 
-        .prize-link, .retry-button, .start-button {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 1rem 2rem;
-            background: #00563B;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
+    .prize-link, .retry-button, .start-button {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      background: #00563B;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-        .retry-button:hover, .start-button:hover {
-            background: #1C6456;
-        }
-    </style>
+    .retry-button:hover, .start-button:hover {
+      background: #1C6456;
+    }
+
+    /* تحسين العرض على الشاشات الصغيرة */
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+      .header {
+        padding: 1rem;
+      }
+      .quiz-box {
+        padding: 1rem;
+      }
+      .winner-box, .loser-box, .start-box {
+        width: 90%;
+        padding: 1.5rem;
+      }
+      .question {
+        font-size: 1.2rem;
+      }
+      .score, .timer {
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>مسابقة يوم التأسيس السعودي 🇸🇦</h1>
-            <p>اختبر معلوماتك التاريخية واربح جائزة قيمة!</p>
-            <div class="score">النقاط: <span id="score">0</span>/10</div>
-            <div class="timer">الوقت المتبقي: <span id="timer">50</span> ثانية</div>
-        </div>
-
-        <div class="quiz-box" id="quiz-container"></div>
+  <div class="container">
+    <div class="header">
+      <h1>مسابقة يوم التأسيس السعودي 🇸🇦</h1>
+      <p>اختبر معلوماتك التاريخية واربح جائزة قيمة!</p>
+      <div class="score">النقاط: <span id="score">0</span>/10</div>
+      <div class="timer">الوقت المتبقي: <span id="timer">50</span> ثانية</div>
     </div>
 
-    <div class="winner-box" id="winner-box">
-        <h2>مبروك! لقد فزت 🎉</h2>
-        <p>استحقاقك للجائزة دليل على وعيك بتاريخ وطنك العظيم</p>
-        <a href="https://forms.gle/V82HSAGbogqp9H7d8" class="prize-link" target="_blank">استلام الجائزة</a>
-    </div>
+    <div class="quiz-box" id="quiz-container"></div>
+  </div>
 
-    <div class="loser-box" id="loser-box">
-        <h2>للأسف، لم تفز هذه المرة 😔</h2>
-        <p>حاول مرة أخرى لتحسين معرفتك بتاريخ وطنك العظيم</p>
-        <div class="retry-button" onclick="retryQuiz()">إعادة المحاولة</div>
-    </div>
+  <div class="winner-box" id="winner-box">
+    <h2>مبروك! لقد فزت 🎉</h2>
+    <p>استحقاقك للجائزة دليل على وعيك بتاريخ وطنك العظيم</p>
+    <a href="https://forms.gle/V82HSAGbogqp9H7d8" class="prize-link" target="_blank">استلام الجائزة</a>
+  </div>
 
-    <div class="start-box" id="start-box">
-        <h2>مرحبًا بك في مسابقة يوم التأسيس السعودي!</h2>
-        <p>سيتم عرض 10 أسئلة تاريخية بشكل عشوائي، ولديك 50 ثانية للإجابة عليها.<br>إذا أجبت على جميع الأسئلة بشكل صحيح، فستفوز بجائزة قيمة!</p>
-        <div class="start-button" onclick="startQuiz()">ابدأ المسابقة</div>
-    </div>
+  <div class="loser-box" id="loser-box">
+    <h2>للأسف، لم تفز هذه المرة 😔</h2>
+    <p>حاول مرة أخرى لتحسين معرفتك بتاريخ وطنك العظيم</p>
+    <div class="retry-button" onclick="retryQuiz()">إعادة المحاولة</div>
+  </div>
 
-    <canvas class="confetti" id="confetti-canvas"></canvas>
+  <div class="start-box" id="start-box">
+    <h2>مرحبًا بك في مسابقة يوم التأسيس السعودي!</h2>
+    <p>
+      سيتم عرض 10 أسئلة تاريخية بشكل عشوائي، ولديك 50 ثانية للإجابة عليها.<br>
+      إذا أجبت على جميع الأسئلة بشكل صحيح، فستفوز بجائزة قيمة!
+    </p>
+    <div class="start-button" onclick="startQuiz()">ابدأ المسابقة</div>
+  </div>
 
-    <script>
-        // الأسئلة التاريخية (30 سؤال)
-        const allQuestions = [
-            {
-                question: "في أي عام تم تأسيس الدولة السعودية الأولى؟",
-                options: ["1727", "1744", "1932", "1800"],
-                correct: 0
-            },
-            {
-                question: "في أي منطقة تأسست الدولة السعودية الأولى؟",
-                options: ["الرياض", "الدرعية", "جدة", "مكة المكرمة"],
-                correct: 1
-            },
-            {
-                question: "من هو مؤسس الدولة السعودية الأولى؟",
-                options: ["الإمام محمد بن سعود", "الملك عبدالعزيز", "الملك سعود", "الملك فيصل"],
-                correct: 0
-            },
-            {
-                question: "في أي عام تم تأسيس المملكة العربية السعودية الحديثة؟",
-                options: ["1932", "1927", "1945", "1953"],
-                correct: 0
-            },
-            {
-                question: "من هو مؤسس المملكة العربية السعودية الحديثة؟",
-                options: ["الملك سعود", "الملك خالد", "الملك عبدالعزيز", "الملك سلمان"],
-                correct: 2
-            },
-            {
-                question: "أي من هذه الأحداث يمثل مرحلة تأسيس الدولة السعودية الأولى؟",
-                options: ["تحالف الإمام محمد بن سعود مع الشيخ محمد بن عبدالوهاب", "توقيع معاهدة الجوار", "الحرب الخليجية", "ثورة اليمن"],
-                correct: 0
-            },
-            {
-                question: "ما هي المدينة التي تُعتبر مركز تأسيس المملكة العربية السعودية الحديثة؟",
-                options: ["الدرعية", "الرياض", "جدة", "الدمام"],
-                correct: 1
-            },
-            {
-                question: "ما هو اسم الاحتفال الوطني الذي يحتفي بتأسيس الدولة السعودية الأولى؟",
-                options: ["يوم الاستقلال", "يوم الوحدة", "يوم التأسيس", "يوم العلم"],
-                correct: 2
-            },
-            {
-                question: "في أي مرحلة من مراحل الدولة السعودية تم توحيد المملكة؟",
-                options: ["الدولة السعودية الأولى", "الدولة السعودية الثانية", "المملكة العربية السعودية الحديثة", "لا شيء مما ذكر"],
-                correct: 2
-            },
-            {
-                question: "أي من هذه القيم يعكس روح يوم التأسيس؟",
-                options: ["الوحدة", "التعددية", "الفردية", "اللامركزية"],
-                correct: 0
-            },
-            {
-                question: "ما هو الشعار الرسمي ليوم التأسيس؟",
-                options: ["راية التوحيد", "سيفين ونخلة", "الشعار الملكي", "شعار الرؤية"],
-                correct: 0
-            },
-            {
-                question: "ما هي المدة الزمنية التي استمرت فيها الدولة السعودية الأولى؟",
-                options: ["73 عامًا", "50 عامًا", "100 عامًا", "120 عامًا"],
-                correct: 0
-            },
-            {
-                question: "ما هو الهدف الرئيسي من تأسيس الدولة السعودية الأولى؟",
-                options: ["توحيد شبه الجزيرة العربية", "التوسع العسكري", "التجارة الدولية", "الاستقلال الاقتصادي"],
-                correct: 0
-            },
-            {
-                question: "ما هو الدور الذي لعبه الشيخ محمد بن عبدالوهاب في تأسيس الدولة السعودية الأولى؟",
-                options: ["الإصلاح الديني", "التخطيط العسكري", "الإدارة المالية", "العلاقات الخارجية"],
-                correct: 0
-            },
-            {
-                question: "ما هو السبب الرئيسي لسقوط الدولة السعودية الأولى؟",
-                options: ["الغزو العثماني", "الصراعات الداخلية", "الأزمات الاقتصادية", "الكوارث الطبيعية"],
-                correct: 0
-            },
-            {
-                question: "ما هو الإرث الرئيسي للدولة السعودية الأولى؟",
-                options: ["توحيد الجزيرة العربية", "إنشاء نظام تعليمي", "تأسيس جيش قوي", "بناء المدن الكبرى"],
-                correct: 0
-            },
-            {
-                question: "ما هو الدور الذي لعبه الملك عبدالعزيز في تأسيس المملكة العربية السعودية الحديثة؟",
-                options: ["توحيد المملكة", "إنشاء النظام التعليمي", "تأسيس الجيش", "بناء الاقتصاد"],
-                correct: 0
-            },
-            {
-                question: "ما هي العاصمة الأولى للمملكة العربية السعودية الحديثة؟",
-                options: ["الرياض", "الدرعية", "جدة", "مكة المكرمة"],
-                correct: 1
-            },
-            {
-                question: "ما هو العام الذي تم فيه توحيد المملكة العربية السعودية؟",
-                options: ["1932", "1927", "1945", "1953"],
-                correct: 0
-            },
-            {
-                question: "ما هو الدور الذي لعبه الملك سعود في تاريخ المملكة؟",
-                options: ["تطوير التعليم", "تأسيس الجيش", "بناء الاقتصاد", "كل ما سبق"],
-                correct: 3
-            },
-            {
-                question: "ما اسم المعركة التي أنهت الدولة السعودية الأولى؟",
-                options: ["معركة الرياض", "معركة الدرعية", "معركة جدة", "معركة مكة"],
-                correct: 1
-            },
-            {
-                question: "كم عدد أئمة الدولة السعودية الأولى؟",
-                options: ["3", "4", "5", "6"],
-                correct: 1
-            },
-            {
-                question: "ما اسم القائد العثماني الذي هاجم الدرعية؟",
-                options: ["إبراهيم باشا", "محمد علي باشا", "سليمان باشا", "علي بك"],
-                correct: 0
-            },
-            {
-                question: "ما المدة التي استغرقها حصار الدرعية؟",
-                options: ["6 أشهر", "سنة واحدة", "5 سنوات", "6 سنوات"],
-                correct: 3
-            },
-            {
-                question: "أين توفي الإمام تركي بن عبدالله؟",
-                options: ["الرياض", "الدرعية", "عنيزة", "القصيم"],
-                correct: 0
-            },
-            {
-                question: "ما اسم نظام الحكم في الدولة السعودية الأولى؟",
-                options: ["ملكي", "جمهوري", "إمامة", "سلطنة"],
-                correct: 2
-            },
-            {
-                question: "ما العملة المستخدمة في الدولة السعودية الأولى؟",
-                options: ["الريال", "الجنيه", "القرش", "الدينار"],
-                correct: 2
-            },
-            {
-                question: "ما اسم التحالف الذي واجه الدولة السعودية الأولى؟",
-                options: ["تحالف المماليك", "تحالف العثمانيين", "تحالف القبائل", "تحالف البريطانيين"],
-                correct: 0
-            },
-            {
-                question: "ما اسم النظام الإداري الذي ابتكرته الدولة السعودية الأولى؟",
-                options: ["المناطق", "الإمارات", "الأقاليم", "المخافر"],
-                correct: 1
-            },
-            {
-                question: "ما أهم إنجاز اقتصادي للدولة السعودية الأولى؟",
-                options: ["تأسيس البنوك", "تنظيم التجارة", "اكتشاف النفط", "بناء الموانئ"],
-                correct: 1
-            }
-        ];
+  <canvas class="confetti" id="confetti-canvas"></canvas>
 
-        let currentQuestions = [];
-        let currentQuestion = 0;
-        let score = 0;
-        let timeLeft = 50;
-        let timerInterval;
+  <script>
+    // الأسئلة التاريخية (30 سؤال)
+    const allQuestions = [
+      {
+        question: "في أي عام تم تأسيس الدولة السعودية الأولى؟",
+        options: ["1727", "1744", "1932", "1800"],
+        correct: 1
+      },
+      {
+        question: "في أي منطقة تأسست الدولة السعودية الأولى؟",
+        options: ["الرياض", "الدرعية", "جدة", "مكة المكرمة"],
+        correct: 1
+      },
+      {
+        question: "من هو مؤسس الدولة السعودية الأولى؟",
+        options: ["الإمام محمد بن سعود", "الملك عبدالعزيز", "الملك سعود", "الملك فيصل"],
+        correct: 0
+      },
+      {
+        question: "في أي عام تم تأسيس المملكة العربية السعودية الحديثة؟",
+        options: ["1932", "1927", "1945", "1953"],
+        correct: 0
+      },
+      {
+        question: "من هو مؤسس المملكة العربية السعودية الحديثة؟",
+        options: ["الملك سعود", "الملك خالد", "الملك عبدالعزيز", "الملك سلمان"],
+        correct: 2
+      },
+      {
+        question: "أي من هذه الأحداث يمثل مرحلة تأسيس الدولة السعودية الأولى؟",
+        options: ["تحالف الإمام محمد بن سعود مع الشيخ محمد بن عبدالوهاب", "توقيع معاهدة الجوار", "الحرب الخليجية", "ثورة اليمن"],
+        correct: 0
+      },
+      {
+        question: "ما هي المدينة التي تُعتبر مركز تأسيس المملكة العربية السعودية الحديثة؟",
+        options: ["الدرعية", "الرياض", "جدة", "الدمام"],
+        correct: 1
+      },
+      {
+        question: "ما هو اسم الاحتفال الوطني الذي يحتفي بتأسيس الدولة السعودية الأولى؟",
+        options: ["يوم الاستقلال", "يوم الوحدة", "يوم التأسيس", "يوم العلم"],
+        correct: 2
+      },
+      {
+        question: "في أي مرحلة من مراحل الدولة السعودية تم توحيد المملكة؟",
+        options: ["الدولة السعودية الأولى", "الدولة السعودية الثانية", "المملكة العربية السعودية الحديثة", "لا شيء مما ذكر"],
+        correct: 2
+      },
+      {
+        question: "أي من هذه القيم يعكس روح يوم التأسيس؟",
+        options: ["الوحدة", "التعددية", "الفردية", "اللامركزية"],
+        correct: 0
+      },
+      {
+        question: "ما هو الشعار الرسمي ليوم التأسيس؟",
+        options: ["راية التوحيد", "سيفين ونخلة", "الشعار الملكي", "شعار الرؤية"],
+        correct: 0
+      },
+      {
+        question: "ما هي المدة الزمنية التي استمرت فيها الدولة السعودية الأولى؟",
+        options: ["73 عامًا", "50 عامًا", "100 عامًا", "120 عامًا"],
+        correct: 0
+      },
+      {
+        question: "ما هو الهدف الرئيسي من تأسيس الدولة السعودية الأولى؟",
+        options: ["توحيد شبه الجزيرة العربية", "التوسع العسكري", "التجارة الدولية", "الاستقلال الاقتصادي"],
+        correct: 0
+      },
+      {
+        question: "ما هو الدور الذي لعبه الشيخ محمد بن عبدالوهاب في تأسيس الدولة السعودية الأولى؟",
+        options: ["الإصلاح الديني", "التخطيط العسكري", "الإدارة المالية", "العلاقات الخارجية"],
+        correct: 0
+      },
+      {
+        question: "ما هو السبب الرئيسي لسقوط الدولة السعودية الأولى؟",
+        options: ["الغزو العثماني", "الصراعات الداخلية", "الأزمات الاقتصادية", "الكوارث الطبيعية"],
+        correct: 0
+      },
+      {
+        question: "ما هو الإرث الرئيسي للدولة السعودية الأولى؟",
+        options: ["توحيد الجزيرة العربية", "إنشاء نظام تعليمي", "تأسيس جيش قوي", "بناء المدن الكبرى"],
+        correct: 0
+      },
+      {
+        question: "ما هو الدور الذي لعبه الملك عبدالعزيز في تأسيس المملكة العربية السعودية الحديثة؟",
+        options: ["توحيد المملكة", "إنشاء النظام التعليمي", "تأسيس الجيش", "بناء الاقتصاد"],
+        correct: 0
+      },
+      {
+        question: "ما هي العاصمة الأولى للمملكة العربية السعودية الحديثة؟",
+        options: ["الرياض", "الدرعية", "جدة", "مكة المكرمة"],
+        correct: 0
+      },
+      {
+        question: "ما هو العام الذي تم فيه توحيد المملكة العربية السعودية؟",
+        options: ["1932", "1927", "1945", "1953"],
+        correct: 0
+      },
+      {
+        question: "ما هو الدور الذي لعبه الملك سعود في تاريخ المملكة؟",
+        options: ["تطوير التعليم", "تأسيس الجيش", "بناء الاقتصاد", "كل ما سبق"],
+        correct: 3
+      },
+      {
+        question: "ما اسم المعركة التي أنهت الدولة السعودية الأولى؟",
+        options: ["معركة الرياض", "معركة الدرعية", "معركة جدة", "معركة مكة"],
+        correct: 1
+      },
+      {
+        question: "كم عدد أئمة الدولة السعودية الأولى؟",
+        options: ["3", "4", "5", "6"],
+        correct: 1
+      },
+      {
+        question: "ما اسم القائد العثماني الذي هاجم الدرعية؟",
+        options: ["إبراهيم باشا", "محمد علي باشا", "سليمان باشا", "علي بك"],
+        correct: 0
+      },
+      {
+        question: "ما المدة التي استغرقها حصار الدرعية؟",
+        options: ["6 أشهر", "سنة واحدة", "5 سنوات", "6 سنوات"],
+        correct: 0
+      },
+      {
+        question: "أين توفي الإمام تركي بن عبدالله؟",
+        options: ["الرياض", "الدرعية", "عنيزة", "القصيم"],
+        correct: 0
+      },
+      {
+        question: "ما اسم نظام الحكم في الدولة السعودية الأولى؟",
+        options: ["ملكي", "جمهوري", "إمامة", "سلطنة"],
+        correct: 2
+      },
+      {
+        question: "ما العملة المستخدمة في الدولة السعودية الأولى؟",
+        options: ["الريال", "الجنيه", "القرش", "الدينار"],
+        correct: 2
+      },
+      {
+        question: "ما اسم التحالف الذي واجه الدولة السعودية الأولى؟",
+        options: ["تحالف المماليك", "تحالف العثمانيين", "تحالف القبائل", "تحالف البريطانيين"],
+        correct: 1
+      },
+      {
+        question: "ما اسم النظام الإداري الذي ابتكرته الدولة السعودية الأولى؟",
+        options: ["المناطق", "الإمارات", "الأقاليم", "المخافر"],
+        correct: 1
+      },
+      {
+        question: "ما أهم إنجاز اقتصادي للدولة السعودية الأولى؟",
+        options: ["تأسيس البنوك", "تنظيم التجارة", "اكتشاف النفط", "بناء الموانئ"],
+        correct: 1
+      }
+    ];
 
-        // دالة خلط المصفوفة
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
+    let currentQuestions = [];
+    let currentQuestion = 0;
+    let score = 0;
+    let timeLeft = 50;
+    let timerInterval;
+
+    // دالة خلط المصفوفة
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function startQuiz() {
+      // إعادة تعيين المتغيرات
+      currentQuestion = 0;
+      score = 0;
+      timeLeft = 50;
+      document.getElementById('score').textContent = score;
+      document.getElementById('timer').textContent = timeLeft;
+
+      // توليد أسئلة عشوائية جديدة
+      const shuffledQuestions = [...allQuestions];
+      shuffleArray(shuffledQuestions);
+      currentQuestions = shuffledQuestions.slice(0, 10);
+
+      // خلط الخيارات لكل سؤال
+      currentQuestions.forEach(q => {
+        const correctAnswer = q.options[q.correct];
+        shuffleArray(q.options);
+        q.correct = q.options.indexOf(correctAnswer);
+      });
+
+      // بدء المؤقت
+      clearInterval(timerInterval);
+      startTimer();
+
+      // إظهار واجهة المسابقة
+      document.getElementById('start-box').style.display = 'none';
+      document.getElementById('quiz-container').style.display = 'block';
+      generateQuestion();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          showResult(false);
         }
+      }, 1000);
+    }
 
-        function startQuiz() {
-            // إعادة تعيين المتغيرات
-            currentQuestion = 0;
-            score = 0;
-            timeLeft = 50;
-            document.getElementById('score').textContent = score;
-            document.getElementById('timer').textContent = timeLeft;
+    function generateQuestion() {
+      const quizContainer = document.getElementById('quiz-container');
+      const q = currentQuestions[currentQuestion];
+      let html = `
+        <div class="question">${q.question}</div>
+        <div class="options">
+      `;
+      q.options.forEach((option, index) => {
+        html += `<div class="option" onclick="checkAnswer(${index})">${option}</div>`;
+      });
+      html += `</div>`;
+      quizContainer.innerHTML = html;
+    }
 
-            // توليد أسئلة عشوائية جديدة
-            const shuffledQuestions = [...allQuestions];
-            shuffleArray(shuffledQuestions);
-            currentQuestions = shuffledQuestions.slice(0, 10);
+    function checkAnswer(selected) {
+      const correctAnswer = currentQuestions[currentQuestion].correct;
+      const options = document.querySelectorAll('.option');
 
-            // خلط الخيارات لكل سؤال
-            currentQuestions.forEach(q => {
-                const correctAnswer = q.options[q.correct];
-                shuffleArray(q.options);
-                q.correct = q.options.indexOf(correctAnswer);
-            });
-
-            // بدء المؤقت
-            clearInterval(timerInterval);
-            startTimer();
-
-            // إظهار الواجهة
-            document.getElementById('start-box').style.display = 'none';
-            document.getElementById('quiz-container').style.display = 'block';
-            generateQuestion();
-        }
-
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').textContent = timeLeft;
-
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    showResult(false);
-                }
-            }, 1000);
-        }
-
-        function generateQuestion() {
-            const quizContainer = document.getElementById('quiz-container');
-            const q = currentQuestions[currentQuestion];
-            
-            let html = `
-                <div class="question">${q.question}</div>
-                <div class="options">
-            `;
-            q.options.forEach((option, index) => {
-                html += `<div class="option" onclick="checkAnswer(${index})">${option}</div>`;
-            });
-            html += `</div>`;
-            quizContainer.innerHTML = html;
-        }
-        function checkAnswer(selected) {
-    const correctAnswer = currentQuestions[currentQuestion].correct;
-    const options = document.querySelectorAll('.option');
-
-    // تعطيل النقر على الخيارات وتلوين الإجابات
-    options.forEach((option, index) => {
+      // تعطيل النقر وتلوين الخيارات بعد الاختيار
+      options.forEach((option, index) => {
         option.style.pointerEvents = 'none';
-        if (index === correctAnswer) {
-            option.style.background = '#4CAF50';
-        } else {
-            option.style.background = '#f44336';
-        }
-    });
+        option.style.background = (index === correctAnswer) ? '#4CAF50' : '#f44336';
+      });
 
-    // إذا كانت الإجابة صحيحة نستمر في المسابقة
-    if (selected === correctAnswer) {
+      if (selected === correctAnswer) {
         score++;
         document.getElementById('score').textContent = score;
         setTimeout(() => {
-            currentQuestion++;
-            if (currentQuestion < currentQuestions.length) {
-                generateQuestion();
-            } else {
-                showResult(true);
-            }
+          currentQuestion++;
+          if (currentQuestion < currentQuestions.length) {
+            generateQuestion();
+          } else {
+            showResult(true);
+          }
         }, 1500);
-    } else {
-        // إذا كانت الإجابة خاطئة، نوقف المؤقت ونعرض رسالة الخسارة مباشرة بعد تأخير بسيط
+      } else {
         setTimeout(() => {
-            showResult(false);
+          showResult(false);
         }, 1500);
+      }
     }
-}
 
+    function showResult(isWinner) {
+      clearInterval(timerInterval);
+      if (isWinner && score === 10) {
+        startConfetti();
+        document.getElementById('winner-box').style.display = 'block';
+      } else {
+        document.getElementById('loser-box').style.display = 'block';
+      }
+    }
 
-        function showResult(isWinner) {
-            clearInterval(timerInterval);
-            if (isWinner && score === 10) {
-                startConfetti();
-                document.getElementById('winner-box').style.display = 'block';
-            } else {
-                document.getElementById('loser-box').style.display = 'block';
-            }
-        }
+    function retryQuiz() {
+      document.getElementById('loser-box').style.display = 'none';
+      document.getElementById('winner-box').style.display = 'none';
+      startQuiz();
+    }
 
-        function retryQuiz() {
-            document.getElementById('loser-box').style.display = 'none';
-            document.getElementById('winner-box').style.display = 'none';
-            startQuiz();
-        }
+    function startConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-        function startConfetti() {
-            const canvas = document.getElementById('confetti-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+      const confettiPieces = [];
+      for (let i = 0; i < 100; i++) {
+        confettiPieces.push({
+          x: Math.random() * canvas.width,
+          y: -Math.random() * canvas.height,
+          color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+          size: Math.random() * 10 + 5,
+          speed: Math.random() * 3 + 2,
+          angle: Math.random() * Math.PI * 2
+        });
+      }
 
-            const confettiPieces = [];
-            for (let i = 0; i < 100; i++) {
-                confettiPieces.push({
-                    x: Math.random() * canvas.width,
-                    y: -Math.random() * canvas.height,
-                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-                    size: Math.random() * 10 + 5,
-                    speed: Math.random() * 3 + 2,
-                    angle: Math.random() * Math.PI * 2
-                });
-            }
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettiPieces.forEach(confetto => {
+          confetto.y += confetto.speed;
+          confetto.x += Math.cos(confetto.angle) * 2;
+          confetto.angle += 0.1;
+          ctx.fillStyle = confetto.color;
+          ctx.beginPath();
+          ctx.arc(confetto.x, confetto.y, confetto.size, 0, Math.PI * 2);
+          ctx.fill();
+          if (confetto.y > canvas.height) {
+            confetto.y = -confetto.size;
+            confetto.x = Math.random() * canvas.width;
+          }
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
 
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                confettiPieces.forEach(confetto => {
-                    confetto.y += confetto.speed;
-                    confetto.x += Math.cos(confetto.angle) * 2;
-                    confetto.angle += 0.1;
-
-                    ctx.fillStyle = confetto.color;
-                    ctx.beginPath();
-                    ctx.arc(confetto.x, confetto.y, confetto.size, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    if (confetto.y > canvas.height) {
-                        confetto.y = -confetto.size;
-                        confetto.x = Math.random() * canvas.width;
-                    }
-                });
-
-                requestAnimationFrame(animate);
-            }
-
-            animate();
-        }
-
-        // بدء التطبيق
-        document.getElementById('start-box').style.display = 'block';
-    </script>
+    // إظهار واجهة البداية عند تحميل الصفحة
+    document.getElementById('start-box').style.display = 'block';
+  </script>
 </body>
 </html>
