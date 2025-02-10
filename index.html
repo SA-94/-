@@ -24,11 +24,12 @@
       background: transparent;
     }
 
+    /* إذا كانت صورة الشعار تظهر فارغة من الجوانب، يمكنك تعديل خصائصها */
     #college-logo {
-      width: 85%;
-      max-width: 400px;
+      width: 100%;      /* جعل الشعار يمتد بعرض الحاوية */
+      max-width: none;  /* إزالة الحد الأقصى إذا كان موجودًا */
       height: auto;
-      padding: 0 5%;
+      /* إزالة padding لضمان ملء الحاوية */
     }
 
     /* شاشة البداية */
@@ -39,30 +40,36 @@
       align-items: center;
       min-height: 100vh;
       text-align: center;
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/6.png') no-repeat center center/cover;
+      /* استخدام خلفية تملأ الشاشة بالكامل */
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                  url('images/6.png') no-repeat center center;
+      background-size: cover;
       color: white;
-      padding: 1rem;
+      padding: 0; /* إزالة padding لتفادي الفراغ على الجوانب */
       box-sizing: border-box;
     }
 
     /* النصوص */
     #start-text {
-      font-size: 6vw;
+      font-size: 8vw; /* تكبير الخط (كان 6vw سابقاً) */
       margin: 1rem 0 0.5rem;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      border: 2px solid white; /* إضافة إطار */
+      padding: 0.5rem;
     }
 
     #start-subtext {
-      font-size: 4.5vw;
+      font-size: 6vw; /* تكبير الخط (كان 4.5vw) */
       margin: 0.5rem 0;
     }
 
+    /* باقي الفقرات داخل الشاشة الرئيسية */
     #start-container p {
-      font-size: 4vw;
+      font-size: 5vw; /* تكبير الخط (كان 4vw) */
       margin: 0.5rem 0 1rem;
     }
 
-    /* زر البداية */
+    /* زر البداية مع تأثير الوميض */
     #start-btn {
       background-color: #A67C52;
       color: white;
@@ -76,6 +83,14 @@
       max-width: 300px;
       box-shadow: 0 4px 15px rgba(166, 124, 82, 0.4);
       transition: transform 0.3s ease;
+      animation: blink 1.5s infinite; /* تطبيق حركة الوميض */
+    }
+
+    /* حركة الوميض */
+    @keyframes blink {
+      0%   { opacity: 1; }
+      50%  { opacity: 0; }
+      100% { opacity: 1; }
     }
 
     /* شاشة الفيديو */
@@ -117,7 +132,7 @@
     /* تحسينات للشاشات الصغيرة */
     @media (max-width: 480px) {
       #college-logo {
-        max-width: 250px;
+        /* يمكن تعديلها حسب الحاجة */
       }
 
       #start-btn {
