@@ -178,6 +178,7 @@
       overflow: hidden;
     }
 
+    /* عنصر الفيديو المحلي */
     .video-player {
       position: absolute;
       top: 0;
@@ -185,6 +186,18 @@
       width: 100%;
       height: 100%;
       border: none;
+      display: block;
+    }
+    
+    /* عنصر فيديو اليوتيوب */
+    .youtube-player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
     }
 
     .foundation-badge {
@@ -232,17 +245,17 @@
 
   <div class="sidebar">
     <ul class="region-list">
-      <li class="region-item" data-video="videos/diriyah.mp4" onclick="showPopup('الدرعية التاريخية', this.dataset.video)">
+      <!-- استبدال فيديو الدرعية بفيديو اليوتيوب -->
+      <li class="region-item" data-video="https://www.youtube.com/watch?v=8PDgymJJ4OI" onclick="showPopup('حين ولد المستقبل ', this.dataset.video)">
         الدرعية التاريخية
       </li>
-      <li class="region-item" data-video="videos/masmak.mp4" onclick="showPopup('قلعة المصمك', this.dataset.video)">
-        قلعة المصمك
+      <li class="region-item" data-video="https://www.youtube.com/watch?v=Twv3IZB37Tg" onclick="showPopup('قلعة المصمك', this.dataset.video)">
+أسترداد الرياض
       </li>
-      <li class="region-item" data-video="videos/najd.mp4" onclick="showPopup('إرث نجد', this.dataset.video)">
-        إرث نجد
-      </li>
-      <li class="region-item" data-video="videos/hajj.mp4" onclick="showPopup('طريق الحج', this.dataset.video)">
-        طريق الحج
+      <li class="region-item" data-video="../video/2.mp4" onclick="showPopup(' تطور التعليم', this.dataset.video)">
+تعليم القديم      </li>
+      <li class="region-item" data-video="../video/3.mp4" onclick="showPopup('مواجها المملكة للأزمات', this.dataset.video)">
+        الأحداث وا الأزامات 
       </li>
     </ul>
   </div>
@@ -257,10 +270,13 @@
       <button class="close-btn" onclick="closePopup()">×</button>
     </div>
     <div class="video-container">
+      <!-- فيديو العرض المحلي -->
       <video class="video-player" id="videoPlayer" controls>
         <source id="videoSource" type="video/mp4">
         المتصفح لا يدعم تشغيل الفيديو
       </video>
+      <!-- عنصر فيديو اليوتيوب -->
+      <iframe class="youtube-player" id="youtubePlayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
 
@@ -277,6 +293,7 @@
 
     const imageElement = document.getElementById('map-image');
     const videoPlayer = document.getElementById('videoPlayer');
+    const youtubePlayer = document.getElementById('youtubePlayer');
 
     // وظائف التكبير/التصغير
     function zoomIn() {
@@ -328,14 +345,37 @@
       document.removeEventListener('touchmove', drag);
     }
 
-    // إدارة الفيديو
+    // دالة لتحويل رابط فيديو اليوتيوب إلى رابط التضمين (embed)
+    function getYouTubeEmbedUrl(url) {
+      let videoId = "";
+      const regExp = /(?:youtube\.com\/.*[?&]v=|youtu\.be\/)([^&]+)/;
+      const match = url.match(regExp);
+      if(match && match[1]) {
+        videoId = match[1];
+      }
+      return "https://www.youtube.com/embed/" + videoId;
+    }
+
+    // إدارة عرض الفيديو داخل النافذة المنبثقة (Popup)
     function showPopup(title, videoUrl) {
       document.getElementById('popupTitle').textContent = title;
-      document.getElementById('videoSource').src = videoUrl;
-      videoPlayer.load();
+      // التحقق إذا كان الرابط يعود ليوتيوب
+      if(videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+        const embedUrl = getYouTubeEmbedUrl(videoUrl);
+        youtubePlayer.src = embedUrl;
+        youtubePlayer.style.display = 'block';
+        videoPlayer.style.display = 'none';
+      } else {
+        document.getElementById('videoSource').src = videoUrl;
+        videoPlayer.load();
+        videoPlayer.style.display = 'block';
+        youtubePlayer.style.display = 'none';
+      }
       document.getElementById('popupOverlay').style.display = 'block';
       document.getElementById('popup').style.display = 'block';
-      videoPlayer.play();
+      if(videoPlayer.style.display === 'block') {
+        videoPlayer.play();
+      }
     }
 
     function closePopup() {
@@ -343,6 +383,8 @@
       document.getElementById('popup').style.display = 'none';
       videoPlayer.pause();
       videoPlayer.currentTime = 0;
+      document.getElementById('videoSource').src = "";
+      youtubePlayer.src = "";
     }
 
     // إعداد الأحداث
