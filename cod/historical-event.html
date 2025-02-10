@@ -18,8 +18,6 @@
       background: linear-gradient(145deg, var(--earth1), var(--earth2));
       color: var(--sand);
       touch-action: pan-x pan-y;
-      /* منع ظهور أشرطة التمرير في الصفحة */
-      overflow: hidden;
     }
 
     .header {
@@ -37,11 +35,10 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
 
-    /* تقليص حجم الخريطة عن طريق تقليل العرض والارتفاع */
     .map-container {
       position: relative;
-      width: 80vw;  /* تم تقليص العرض من 95vw إلى 80vw */
-      height: 50vh; /* تم تقليص الارتفاع من 60vh إلى 50vh */
+      width: 95vw;
+      height: 60vh;
       margin: 1rem auto;
       border: 3px solid var(--gold);
       border-radius: 15px;
@@ -220,8 +217,8 @@
 
     @media (min-width: 768px) {
       .map-container {
-        width: 80vw;  /* يمكن تعديلها حسب رغبتك */
-        height: 50vh;
+        width: 85vw;
+        height: 70vh;
       }
       
       .sidebar {
