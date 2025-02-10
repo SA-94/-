@@ -179,3 +179,220 @@
   </style>
 </head>
 <body>
+  <header class="header">
+      <div class="stage-indicator">المرحلة <span id="currentStage">1</span></div>
+      <h1>🎨 ذاكرة الألوان 🎲</h1>
+  </header>
+
+  <div class="game-container">
+      <div class="game-info">
+          <span>⏳ الوقت: <span id="timer">0</span></span>
+          <span>🎯 المحاولات: <span id="attempts">0</span></span>
+          <span>💎 التطابقات: <span id="matches">0</span></span>
+      </div>
+      <div class="cards-grid" id="cardsGrid"></div>
+  </div>
+
+  <canvas class="fireworks" id="fireworks"></canvas>
+
+  <div id="timeoutOverlay" style="display:none;">
+      <div>⏱️ انتهى الوقت! حاول مرة أخرى.</div>
+  </div>
+
+  <script>
+    // التعديلات في الجافاسكريبت
+    const gameStages = [
+      { time: 30, pairs: 4 },
+      { time: 60, pairs: 6 },
+      { time: 90, pairs: 8 }
+    ];
+
+    const colorPalette = [
+      { color: '#FF6B6B', number: '١' },
+      { color: '#4ECDC4', number: '٢' },
+      { color: '#45B7D1', number: '٣' },
+      { color: '#96CEB4', number: '٤' },
+      { color: '#FFEEAD', number: '٥' },
+      { color: '#D4A5A5', number: '٦' },
+      { color: '#9B59B6', number: '٧' },
+      { color: '#E74C3C', number: '٨' },
+      { color: '#2ECC71', number: '٩' },
+      { color: '#F1C40F', number: '١٠' },
+      { color: '#E67E22', number: '١١' },
+      { color: '#34495E', number: '١٢' }
+    ];
+
+    let currentStage = 0;
+    let timeLeft = 0;
+    let timer;
+    let attempts = 0;
+    let matches = 0;
+    let flippedCards = [];
+
+    function startGame() {
+      const config = gameStages[currentStage];
+      setupGrid(config);
+      timeLeft = config.time;
+      attempts = 0;
+      matches = 0;
+      flippedCards = [];
+      updateDisplay();
+      startTimer();
+      document.getElementById('currentStage').textContent = currentStage + 1;
+    }
+
+    function setupGrid(config) {
+      const grid = document.getElementById('cardsGrid');
+      const baseCols = Math.ceil(Math.sqrt(config.pairs * 2));
+      const cols = baseCols + Math.floor(Math.random() * 2);
+      
+      // إضافة حجم أدنى للبطاقات
+      grid.style.gridTemplateColumns = `repeat(${cols}, minmax(80px, 1fr))`;
+      
+      const pairs = colorPalette.slice(0, config.pairs);
+      const cards = [...pairs, ...pairs];
+      shuffleArray(cards);
+      
+      grid.innerHTML = cards.map(item => `
+        <div class="card" 
+             onclick="flipCard(this)" 
+             data-color="${item.color}" 
+             data-number="${item.number}">
+          <div class="card-face card-back"></div>
+          <div class="card-face card-front" style="background:${item.color}">
+            <div class="card-number">${item.number}</div>
+            <div class="card-color" style="background:${item.color}"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // التأكد من وجود دالة flipCard
+    function flipCard(card) {
+      if (card.classList.contains('flipped') || 
+          card.classList.contains('matched') || 
+          flippedCards.length >= 2) return;
+
+      card.classList.add('flipped');
+      flippedCards.push(card);
+
+      if (flippedCards.length === 2) {
+        attempts++;
+        updateDisplay();
+        checkForMatch();
+      }
+    }
+
+    function checkForMatch() {
+      const [card1, card2] = flippedCards;
+      const isMatch = card1.dataset.color === card2.dataset.color &&
+                     card1.dataset.number === card2.dataset.number;
+
+      if (isMatch) {
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        matches++;
+        flippedCards = [];
+        if (matches === gameStages[currentStage].pairs) {
+          endGame(true);
+        }
+      } else {
+        setTimeout(() => {
+          card1.classList.remove('flipped');
+          card2.classList.remove('flipped');
+          flippedCards = [];
+        }, 1000);
+      }
+      updateDisplay();
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function updateDisplay() {
+      document.getElementById('timer').textContent = timeLeft;
+      document.getElementById('attempts').textContent = attempts;
+      document.getElementById('matches').textContent = matches;
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        timeLeft--;
+        updateDisplay();
+        if (timeLeft <= 0) endGame(false);
+      }, 1000);
+    }
+
+    function endGame(isWinner) {
+      clearInterval(timer);
+      if (isWinner) {
+        if (currentStage < gameStages.length - 1) {
+          currentStage++;
+          setTimeout(startGame, 2000);
+        } else {
+          createFireworks();
+        }
+      } else {
+        showTimeoutOverlay();
+      }
+    }
+
+    function showTimeoutOverlay() {
+      const overlay = document.getElementById('timeoutOverlay');
+      overlay.style.display = 'flex';
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        currentStage = 0;
+        startGame();
+      }, 4000);
+    }
+
+    function createFireworks() {
+      const canvas = document.getElementById('fireworks');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      function createParticle() {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: canvas.height,
+          color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+          speed: Math.random() * 5 + 3,
+          radius: Math.random() * 3 + 2,
+          angle: Math.random() * Math.PI * 2
+        });
+      }
+
+      function animate() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach((p, i) => {
+          p.x += Math.cos(p.angle) * 3;
+          p.y -= p.speed;
+          p.radius *= 0.98;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+
+          if (p.radius < 0.5) particles.splice(i, 1);
+        });
+
+        if (particles.length < 100) createParticle();
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    startGame();
+  </script>
+</body>
+</html>
