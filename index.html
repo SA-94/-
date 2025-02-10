@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>يوم التأسيس</title>
   <style>
+    /* إعدادات عامة */
     body, html {
       margin: 0;
       padding: 0;
@@ -14,24 +15,25 @@
       width: 100%;
     }
     
-    /* تحسين الهيدر */
+    /* حاوية الصورة في الأعلى */
     #header-container {
-      position: relative;
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      text-align: center;
-      padding: 1rem 0;
-      background: transparent;
+      height: 25vh; /* ارتفاع نسبي من الشاشة؛ يمكنك تعديله */
+      z-index: 10;
+      overflow: hidden;
     }
     
-    /* تحجيم الصورة بشكل أنسب */
+    /* الصورة داخل الحاوية تُملأها بالكامل */
     #college-logo {
-      max-width: 90%;
-      height: auto;
-      max-height: 180px;
-      object-fit: contain;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* لضمان ملء الصورة للحاوية دون تشويه */
     }
     
-    /* تحسين شاشة البداية */
+    /* شاشة البداية */
     #start-container {
       display: flex;
       flex-direction: column;
@@ -39,56 +41,47 @@
       align-items: center;
       height: 100vh;
       text-align: center;
+      padding-top: 25vh; /* ترك مساحة لتظهر الصورة من فوق */
       background: url('images/6.png') no-repeat center center fixed;
       background-size: cover;
       color: white;
-      padding: 0 1rem;
     }
     
-    /* تحسين النصوص */
     #start-text, #start-subtext, #start-container p {
-      font-size: 2.2rem;
-      line-height: 1.3;
-      margin: 0.5rem 0;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      font-family: 'Ruqaa', sans-serif;
+      font-size: 2.5rem;
+      font-weight: bold;
+      line-height: 1.1;
+      margin: 10px 0;
     }
 
     #start-text {
       color: #fff;
-      margin-top: 2rem;
     }
 
     #start-subtext {
-      color: #f8f8f8;
-      font-size: 1.8rem;
+      color: #f1f1f1;
     }
 
     #start-container p {
-      color: #eee;
-      font-size: 1.6rem;
+      color: #dcdcdc;
     }
 
-    /* تحسين الزر الرئيسي */
     #start-btn {
       background-color: #A67C52;
       color: white;
-      padding: 1.2rem 2rem;
+      padding: 1.5rem 2.5rem;
       border: none;
-      border-radius: 25px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 1.6rem;
-      margin: 2rem 0;
-      box-shadow: 0 4px 15px rgba(166, 124, 82, 0.4);
-      width: auto;
-      min-width: 220px;
-      transition: transform 0.3s ease;
-    }
-
-    #start-btn:hover {
-      transform: scale(1.05);
+      font-size: 1.8rem;
+      margin-top: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 300px;
     }
     
-    /* تحسين شاشة الفيديو */
+    /* شاشة عرض الفيديو */
     #video-container {
       display: none;
       justify-content: center;
@@ -102,37 +95,52 @@
     
     video {
       width: 100%;
-      height: 100%;
-      object-fit: contain;
+      max-height: 100%;
+      object-fit: cover;
     }
     
-    /* تحسين زر التخطي */
+    /* زر تخطي الفيديو (تعديل الموقع ليعمل على الجوال وسطح المكتب) */
     #skip-btn {
       position: absolute;
-      bottom: 30px;
-      left: 30px;
-      background-color: rgba(166, 124, 82, 0.9);
-      color: white;
-      padding: 0.8rem 1.5rem;
-      border: 2px solid #fff;
-      border-radius: 25px;
-      font-size: 1.4rem;
+      bottom: 20px;  /* ثابت من أسفل الشاشة */
+      right: 10px;
+      background-color: rgba(0, 0, 0, 0.225);
+      color: rgb(255, 255, 255);
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.5rem;
       cursor: pointer;
-      backdrop-filter: blur(2px);
-      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-
+    
     #skip-btn:hover {
-      background-color: rgba(166, 124, 82, 1);
-      box-shadow: 0 0 15px rgba(166, 124, 82, 0.8);
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+    
+    /* تعديلات استجابة للشاشات الصغيرة */
+    @media (max-width: 768px) {
+      #start-text, #start-subtext, #start-container p {
+        font-size: 2rem;
+      }
+      #start-btn {
+        font-size: 1.6rem;
+        padding: 1.2rem 2rem;
+      }
+      #skip-btn {
+        font-size: 1.3rem;
+        padding: 0.8rem 1.2rem;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- صورة الشعار في أعلى الصفحة -->
   <div id="header-container">
-    <img src="images/agri-icon.png" alt="كلية العلوم الزراعية والأغذية" id="college-logo">
+    <img src="../يوم التاسيس/images/agri-icon.png" alt="كلية العلوم الزراعية والأغذية" id="college-logo">
   </div>
   
+  <!-- شاشة البداية مع النصوص وزر البدء -->
   <div id="start-container">
     <p id="start-text">يوم التأسيس</p>
     <p id="start-subtext">(زراعتنا يوم بدينا)</p>
@@ -140,6 +148,7 @@
     <button id="start-btn">ابدأ العرض</button>
   </div>
   
+  <!-- شاشة الفيديو -->
   <div id="video-container">
     <video id="intro-video" playsinline>
       <source src="video/1.mp4" type="video/mp4">
@@ -149,7 +158,27 @@
   </div>
   
   <script>
-    // ... (نفس الكود السابق بدون تغيير)
+    const startContainer = document.getElementById("start-container");
+    const videoContainer = document.getElementById("video-container");
+    const video = document.getElementById("intro-video");
+    const startBtn = document.getElementById("start-btn");
+    const skipBtn = document.getElementById("skip-btn");
+  
+    startBtn.addEventListener("click", () => {
+      startContainer.style.display = "none";
+      videoContainer.style.display = "flex";
+      video.muted = false;
+      video.play().catch(error => console.log('Error playing video:', error));
+    });
+  
+    video.addEventListener("ended", () => {
+      window.location.href = "next-page.html";
+    });
+  
+    skipBtn.addEventListener("click", () => {
+      video.pause();
+      window.location.href = "next-page.html";
+    });
   </script>
 </body>
 </html>
