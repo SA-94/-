@@ -55,6 +55,8 @@
       cursor: grab;
       user-select: none;
       transition: transform 0.1s ease-out;
+      /* منع إجراءات اللمس الافتراضية مثل التمرير */
+      touch-action: none;
     }
 
     .sidebar {
@@ -246,16 +248,17 @@
   <div class="sidebar">
     <ul class="region-list">
       <!-- استبدال فيديو الدرعية بفيديو اليوتيوب -->
-      <li class="region-item" data-video="https://www.youtube.com/watch?v=8PDgymJJ4OI" onclick="showPopup('حين ولد المستقبل ', this.dataset.video)">
+      <li class="region-item" data-video="https://www.youtube.com/watch?v=8PDgymJJ4OI" onclick="showPopup('حين ولد المستقبل', this.dataset.video)">
         الدرعية التاريخية
       </li>
       <li class="region-item" data-video="https://www.youtube.com/watch?v=Twv3IZB37Tg" onclick="showPopup('قلعة المصمك', this.dataset.video)">
-أسترداد الرياض
+        أسترداد الرياض
       </li>
-      <li class="region-item" data-video="../video/2.mp4" onclick="showPopup(' تطور التعليم', this.dataset.video)">
-تعليم القديم      </li>
+      <li class="region-item" data-video="../video/2.mp4" onclick="showPopup('تطور التعليم', this.dataset.video)">
+        تعليم القديم
+      </li>
       <li class="region-item" data-video="../video/3.mp4" onclick="showPopup('مواجها المملكة للأزمات', this.dataset.video)">
-        الأحداث وا الأزامات 
+        الأحداث وا الأزامات
       </li>
     </ul>
   </div>
@@ -322,13 +325,18 @@
         y: e.clientY || e.touches[0].clientY
       };
       document.addEventListener('mousemove', drag);
-      document.addEventListener('touchmove', drag);
+      // استخدم { passive: false } للسماح باستخدام e.preventDefault()
+      document.addEventListener('touchmove', drag, { passive: false });
       document.addEventListener('mouseup', endDrag);
       document.addEventListener('touchend', endDrag);
     }
 
     function drag(e) {
       if (!isDragging) return;
+      
+      // منع السلوك الافتراضي لتجنب تحريك الصفحة أثناء السحب
+      e.preventDefault();
+
       const clientX = e.clientX || e.touches[0].clientX;
       const clientY = e.clientY || e.touches[0].clientY;
       
