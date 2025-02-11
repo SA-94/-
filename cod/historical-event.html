@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>رحلة التأسيس السعودي</title>
   <style>
     :root {
@@ -35,28 +35,84 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
 
+    /* الحاوية التي تعرض الخريطة بنسبة أبعاد ثابتة */
     .map-container {
       position: relative;
       width: 95vw;
-      height: 60vh;
+      max-width: 1200px;
       margin: 1rem auto;
       border: 3px solid var(--gold);
       border-radius: 15px;
       overflow: hidden;
       background: var(--sand);
       box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-      aspect-ratio: 988/901; /* نسبة أبعاد الصورة */
+      aspect-ratio: 988 / 901; /* تأكد أن هذه النسبة مطابقة لأبعاد صورة الخريطة */
     }
 
-    #map-image {
+    /* الحاوية المشتركة للخريطة والعلامات */
+    #mapContent {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      transform-origin: top left;
       cursor: grab;
       user-select: none;
       transition: transform 0.1s ease-out;
-      /* منع إجراءات اللمس الافتراضية مثل التمرير */
       touch-action: none;
+    }
+
+    /* صورة الخريطة تملأ الحاوية بالكامل */
+    #map-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* يضمن ملء الحاوية بالكامل دون فراغات */
+      pointer-events: none;
+    }
+
+    /* تنسيق العلامات باستخدام نسب مئوية لتحديد المواقع */
+    .map-marker {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: var(--gold);
+      color: var(--earth1);
+      font-weight: bold;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+    .map-marker:hover {
+      transform: scale(1.2);
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      display: flex;
+      gap: 0.8rem;
+      z-index: 100;
+    }
+
+    .control-btn {
+      padding: 0.8rem 1.2rem;
+      background: rgba(212, 175, 55, 0.95);
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      color: var(--earth1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .control-btn:active {
+      transform: scale(0.95);
     }
 
     .sidebar {
@@ -89,35 +145,9 @@
       transition: all 0.3s ease;
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
-
     .region-item:hover {
       transform: translateY(-2px);
       background: linear-gradient(45deg, var(--gold), var(--earth1));
-    }
-
-    .controls {
-      position: absolute;
-      bottom: 15px;
-      right: 15px;
-      display: flex;
-      gap: 0.8rem;
-      z-index: 100;
-    }
-
-    .control-btn {
-      padding: 0.8rem 1.2rem;
-      background: rgba(212, 175, 55, 0.95);
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      color: var(--earth1);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .control-btn:active {
-      transform: scale(0.95);
     }
 
     .popup-overlay {
@@ -167,7 +197,6 @@
       cursor: pointer;
       transition: transform 0.3s;
     }
-
     .close-btn:hover {
       transform: rotate(90deg);
     }
@@ -180,7 +209,7 @@
       overflow: hidden;
     }
 
-    /* عنصر الفيديو المحلي */
+    /* فيديو العرض المحلي */
     .video-player {
       position: absolute;
       top: 0;
@@ -191,7 +220,7 @@
       display: block;
     }
     
-    /* عنصر فيديو اليوتيوب */
+    /* فيديو اليوتيوب */
     .youtube-player {
       position: absolute;
       top: 0;
@@ -218,7 +247,7 @@
     @media (min-width: 768px) {
       .map-container {
         width: 85vw;
-        height: 70vh;
+        height: auto;
       }
       
       .sidebar {
@@ -237,28 +266,46 @@
   </header>
 
   <div class="map-container">
-    <img id="map-image" src="../images/map.png" alt="الخريطة" />
-    
+    <!-- الحاوية التي تضم صورة الخريطة والعلامات -->
+    <div id="mapContent">
+      <img id="map-image" src="../images/map.png" alt="الخريطة" />
+      <!-- العلامات توضع باستخدام نسب مئوية بحيث تكون مواقعها ثابتة بالنسبة لصورة الخريطة -->
+      <div class="map-marker" style="top: 45%; left: 66%;" 
+           data-title="أكلتنا في الشرقية" 
+           data-video="https://www.youtube.com/watch?v=F4KWoRYBGj0">!</div>
+      <div class="map-marker" style="top: 48%; left: 25%;" 
+           data-title="أكلتنا في الغربية" 
+           data-video="https://www.youtube.com/watch?v=5ogPl495lzA">!</div>
+      <div class="map-marker" style="top: 45%; left: 48%;" 
+           data-title="أكلتنا في الوسطى" 
+           data-video="https://www.youtube.com/watch?v=rBF6WgzMIHg">!</div>
+      <div class="map-marker" style="top: 15%; left: 25%;" 
+           data-title="أكلتنا في الشمالية" 
+           data-video="https://www.youtube.com/watch?v=inGOr9oMSkU">!</div>
+      <div class="map-marker" style="top: 70%; left: 43%;" #جنوبي
+           data-title="أكلتنا في الجنوبية" 
+           data-video="https://www.youtube.com/watch?v=W_Bc_kUiPAE">!</div>
+    </div>
     <div class="controls">
       <button class="control-btn" onclick="zoomIn()">➕ تكبير</button>
       <button class="control-btn" onclick="zoomOut()">➖ تصغير</button>
     </div>
   </div>
 
+  <!-- القائمة الجانبية (اختيارية) -->
   <div class="sidebar">
     <ul class="region-list">
-      <!-- استبدال فيديو الدرعية بفيديو اليوتيوب -->
-      <li class="region-item" data-video="https://www.youtube.com/watch?v=8PDgymJJ4OI" onclick="showPopup('حين ولد المستقبل', this.dataset.video)">
+      <li class="region-item" data-video="https://www.youtube.com/watch?v=8PDgymJJ4OI" onclick="showPopup('الدرعية التاريخية', this.dataset.video)">
         الدرعية التاريخية
       </li>
-      <li class="region-item" data-video="https://www.youtube.com/watch?v=Twv3IZB37Tg" onclick="showPopup('قلعة المصمك', this.dataset.video)">
+      <li class="region-item" data-video="https://www.youtube.com/watch?v=Twv3IZB37Tg" onclick="showPopup('أسترداد الرياض', this.dataset.video)">
         أسترداد الرياض
       </li>
-      <li class="region-item" data-video="../video/2.mp4" onclick="showPopup('تطور التعليم', this.dataset.video)">
+      <li class="region-item" data-video="../video/2.mp4" onclick="showPopup('تعليم القديم', this.dataset.video)">
         تعليم القديم
       </li>
-      <li class="region-item" data-video="../video/3.mp4" onclick="showPopup('مواجها المملكة للأزمات', this.dataset.video)">
-        الأحداث وا الأزامات
+      <li class="region-item" data-video="../video/3.mp4" onclick="showPopup('الأحداث والأزمات', this.dataset.video)">
+        الأحداث والأزمات
       </li>
     </ul>
   </div>
@@ -273,18 +320,16 @@
       <button class="close-btn" onclick="closePopup()">×</button>
     </div>
     <div class="video-container">
-      <!-- فيديو العرض المحلي -->
       <video class="video-player" id="videoPlayer" controls>
-        <source id="videoSource" type="video/mp4">
+        <source id="videoSource" type="video/mp4" />
         المتصفح لا يدعم تشغيل الفيديو
       </video>
-      <!-- عنصر فيديو اليوتيوب -->
       <iframe class="youtube-player" id="youtubePlayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
 
   <script>
-    // إعدادات التحكم بالصورة
+    // إعداد متغيرات التكبير والسحب
     let scale = 1;
     const zoomStep = 0.2;
     const maxScale = 3;
@@ -294,11 +339,11 @@
     let translateX = 0;
     let translateY = 0;
 
-    const imageElement = document.getElementById('map-image');
+    const mapContent = document.getElementById('mapContent');
     const videoPlayer = document.getElementById('videoPlayer');
     const youtubePlayer = document.getElementById('youtubePlayer');
 
-    // وظائف التكبير/التصغير
+    // دوال التكبير والتصغير
     function zoomIn() {
       if (scale < maxScale) {
         scale = Math.min(scale + zoomStep, maxScale);
@@ -314,10 +359,10 @@
     }
 
     function updateTransform() {
-      imageElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+      mapContent.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
     }
 
-    // نظام السحب المحسن
+    // بدء عملية السحب
     function startDrag(e) {
       isDragging = true;
       startPos = {
@@ -325,7 +370,6 @@
         y: e.clientY || e.touches[0].clientY
       };
       document.addEventListener('mousemove', drag);
-      // استخدم { passive: false } للسماح باستخدام e.preventDefault()
       document.addEventListener('touchmove', drag, { passive: false });
       document.addEventListener('mouseup', endDrag);
       document.addEventListener('touchend', endDrag);
@@ -333,16 +377,11 @@
 
     function drag(e) {
       if (!isDragging) return;
-      
-      // منع السلوك الافتراضي لتجنب تحريك الصفحة أثناء السحب
       e.preventDefault();
-
       const clientX = e.clientX || e.touches[0].clientX;
       const clientY = e.clientY || e.touches[0].clientY;
-      
       translateX += (clientX - startPos.x) / scale;
       translateY += (clientY - startPos.y) / scale;
-      
       startPos = { x: clientX, y: clientY };
       updateTransform();
     }
@@ -353,7 +392,7 @@
       document.removeEventListener('touchmove', drag);
     }
 
-    // دالة لتحويل رابط فيديو اليوتيوب إلى رابط التضمين (embed)
+    // تحويل رابط يوتيوب إلى رابط تضمين
     function getYouTubeEmbedUrl(url) {
       let videoId = "";
       const regExp = /(?:youtube\.com\/.*[?&]v=|youtu\.be\/)([^&]+)/;
@@ -364,10 +403,9 @@
       return "https://www.youtube.com/embed/" + videoId;
     }
 
-    // إدارة عرض الفيديو داخل النافذة المنبثقة (Popup)
+    // عرض النافذة المنبثقة للفيديو
     function showPopup(title, videoUrl) {
       document.getElementById('popupTitle').textContent = title;
-      // التحقق إذا كان الرابط يعود ليوتيوب
       if(videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
         const embedUrl = getYouTubeEmbedUrl(videoUrl);
         youtubePlayer.src = embedUrl;
@@ -395,9 +433,20 @@
       youtubePlayer.src = "";
     }
 
-    // إعداد الأحداث
-    imageElement.addEventListener('mousedown', startDrag);
-    imageElement.addEventListener('touchstart', startDrag);
+    // منع بدء السحب عند النقر على العلامات
+    const markers = document.querySelectorAll('.map-marker');
+    markers.forEach(marker => {
+      marker.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const title = marker.getAttribute('data-title');
+        const videoUrl = marker.getAttribute('data-video');
+        showPopup(title, videoUrl);
+      });
+    });
+
+    // إعداد أحداث السحب على الحاوية
+    mapContent.addEventListener('mousedown', startDrag);
+    mapContent.addEventListener('touchstart', startDrag);
 
     // إعادة الضبط عند تغيير حجم النافذة
     window.addEventListener('resize', () => {
