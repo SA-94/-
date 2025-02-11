@@ -8,7 +8,7 @@
     :root {
       --earth1: #5D4037;
       --earth2: #795548;
-      --gold: #D4AF37;
+      --gold: #D4AF37; /* هذا المتغير يمكن استخدامه لتحديد لون بعض العناصر */
       --sand: #EFEBE9;
     }
 
@@ -67,24 +67,40 @@
     #map-image {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* يضمن ملء الحاوية بالكامل دون فراغات */
+      object-fit: cover;
       pointer-events: none;
     }
 
-    /* تنسيق العلامات باستخدام نسب مئوية لتحديد المواقع */
+    /* حركة القفز والدوران: تقفز مرتين وتدور حول نفسها 360° */
+    @keyframes bounceSpin {
+      0%   { transform: scale(1) translateY(0) rotate(0deg); }
+      25%  { transform: scale(1.2) translateY(-20px) rotate(90deg); }
+      50%  { transform: scale(0.8) translateY(10px) rotate(180deg); }
+      75%  { transform: scale(1.2) translateY(-20px) rotate(270deg); }
+      100% { transform: scale(1) translateY(0) rotate(360deg); }
+    }
+    .bounce {
+      animation: bounceSpin 1s ease;
+    }
+
+    /* حركة ظهور النافذة (drop in) */
+    @keyframes dropIn {
+      0% { transform: translate(-50%, -150%); opacity: 0; }
+      100% { transform: translate(-50%, -50%); opacity: 1; }
+    }
+    .popup.drop {
+      animation: dropIn 0.5s ease-out;
+    }
+
+    /* استبدال الدوائر بصورة دبوس */
     .map-marker {
       position: absolute;
-      width: 30px;
-      height: 30px;
-      background-color: var(--gold);
-      color: var(--earth1);
-      font-weight: bold;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 50px;  /* يمكنك تعديل العرض */
+      height: 50px; /* يمكنك تعديل الارتفاع */
+      /* استبدل 'pin.png' برابط الصورة الخاصة بك */
+      background: url('../images/pin.png') no-repeat center center;
+      background-size: contain;
       cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
       transition: transform 0.2s;
     }
     .map-marker:hover {
@@ -100,13 +116,14 @@
       z-index: 100;
     }
 
+    /* تغيير لون وشكل أزرار التحكم */
     .control-btn {
       padding: 0.8rem 1.2rem;
-      background: rgba(212, 175, 55, 0.95);
+      background: linear-gradient(45deg, #FF9800, #FFC107);
       border: none;
-      border-radius: 10px;
+      border-radius: 25px;
       font-weight: bold;
-      color: var(--earth1);
+      color: #ffffff;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       cursor: pointer;
       transition: transform 0.2s;
@@ -269,22 +286,22 @@
     <!-- الحاوية التي تضم صورة الخريطة والعلامات -->
     <div id="mapContent">
       <img id="map-image" src="../images/map.png" alt="الخريطة" />
-      <!-- العلامات توضع باستخدام نسب مئوية بحيث تكون مواقعها ثابتة بالنسبة لصورة الخريطة -->
+      <!-- ضع العلامات باستخدام نسب مئوية؛ بدون نص داخلها لأننا نستخدم صورة دبوس -->
       <div class="map-marker" style="top: 45%; left: 66%;" 
            data-title="أكلتنا في الشرقية" 
-           data-video="https://www.youtube.com/watch?v=F4KWoRYBGj0">!</div>
+           data-video="https://www.youtube.com/watch?v=F4KWoRYBGj0"></div>
       <div class="map-marker" style="top: 48%; left: 25%;" 
            data-title="أكلتنا في الغربية" 
-           data-video="https://www.youtube.com/watch?v=5ogPl495lzA">!</div>
+           data-video="https://www.youtube.com/watch?v=5ogPl495lzA"></div>
       <div class="map-marker" style="top: 45%; left: 48%;" 
            data-title="أكلتنا في الوسطى" 
-           data-video="https://www.youtube.com/watch?v=rBF6WgzMIHg">!</div>
+           data-video="https://www.youtube.com/watch?v=rBF6WgzMIHg"></div>
       <div class="map-marker" style="top: 15%; left: 25%;" 
            data-title="أكلتنا في الشمالية" 
-           data-video="https://www.youtube.com/watch?v=inGOr9oMSkU">!</div>
-      <div class="map-marker" style="top: 70%; left: 43%;" #جنوبي
+           data-video="https://www.youtube.com/watch?v=inGOr9oMSkU"></div>
+      <div class="map-marker" style="top: 70%; left: 43%;" 
            data-title="أكلتنا في الجنوبية" 
-           data-video="https://www.youtube.com/watch?v=W_Bc_kUiPAE">!</div>
+           data-video="https://www.youtube.com/watch?v=W_Bc_kUiPAE"></div>
     </div>
     <div class="controls">
       <button class="control-btn" onclick="zoomIn()">➕ تكبير</button>
@@ -342,6 +359,7 @@
     const mapContent = document.getElementById('mapContent');
     const videoPlayer = document.getElementById('videoPlayer');
     const youtubePlayer = document.getElementById('youtubePlayer');
+    const popup = document.getElementById('popup');
 
     // دوال التكبير والتصغير
     function zoomIn() {
@@ -403,44 +421,58 @@
       return "https://www.youtube.com/embed/" + videoId;
     }
 
-    // عرض النافذة المنبثقة للفيديو
+    // عرض النافذة المنبثقة للفيديو مع حركة الظهور (drop)
+    // ننتظر انتهاء حركة الدبوس (bounce) قبل عرض النافذة
     function showPopup(title, videoUrl) {
-      document.getElementById('popupTitle').textContent = title;
-      if(videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
-        const embedUrl = getYouTubeEmbedUrl(videoUrl);
-        youtubePlayer.src = embedUrl;
-        youtubePlayer.style.display = 'block';
-        videoPlayer.style.display = 'none';
-      } else {
-        document.getElementById('videoSource').src = videoUrl;
-        videoPlayer.load();
-        videoPlayer.style.display = 'block';
-        youtubePlayer.style.display = 'none';
-      }
-      document.getElementById('popupOverlay').style.display = 'block';
-      document.getElementById('popup').style.display = 'block';
-      if(videoPlayer.style.display === 'block') {
-        videoPlayer.play();
-      }
+      setTimeout(() => {
+        popup.classList.add('drop');
+        document.getElementById('popupTitle').textContent = title;
+        if(videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+          const embedUrl = getYouTubeEmbedUrl(videoUrl);
+          youtubePlayer.src = embedUrl;
+          youtubePlayer.style.display = 'block';
+          videoPlayer.style.display = 'none';
+        } else {
+          document.getElementById('videoSource').src = videoUrl;
+          videoPlayer.load();
+          videoPlayer.style.display = 'block';
+          youtubePlayer.style.display = 'none';
+        }
+        document.getElementById('popupOverlay').style.display = 'block';
+        popup.style.display = 'block';
+        if(videoPlayer.style.display === 'block') {
+          videoPlayer.play();
+        }
+      }, 1000); // تأخير 1 ثانية حتى انتهاء حركة الدبوس
     }
 
     function closePopup() {
       document.getElementById('popupOverlay').style.display = 'none';
-      document.getElementById('popup').style.display = 'none';
+      popup.style.display = 'none';
       videoPlayer.pause();
       videoPlayer.currentTime = 0;
       document.getElementById('videoSource').src = "";
       youtubePlayer.src = "";
     }
 
-    // منع بدء السحب عند النقر على العلامات
+    // إزالة فئة drop بعد انتهاء حركة النافذة
+    popup.addEventListener('animationend', function() {
+      this.classList.remove('drop');
+    });
+
+    // عند النقر على الدبوس (العلامة) ننفذ حركة bounce ثم ننتظر حتى الانتهاء لعرض النافذة
     const markers = document.querySelectorAll('.map-marker');
     markers.forEach(marker => {
       marker.addEventListener('click', function(e) {
         e.stopPropagation();
-        const title = marker.getAttribute('data-title');
-        const videoUrl = marker.getAttribute('data-video');
-        showPopup(title, videoUrl);
+        marker.classList.add('bounce');
+        // بعد انتهاء الحركة (1 ثانية) تتم إزالة الفئة واستدعاء عرض النافذة
+        setTimeout(() => {
+          marker.classList.remove('bounce');
+          const title = marker.getAttribute('data-title');
+          const videoUrl = marker.getAttribute('data-video');
+          showPopup(title, videoUrl);
+        }, 1000);
       });
     });
 
