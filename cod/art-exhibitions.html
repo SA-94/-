@@ -1,324 +1,133 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>معرض يوم التأسيس السعودي</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>معرض يوم التأسيس السعودي</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
 
-        body {
-            background: linear-gradient(45deg, #5e3a03, #422801bd);
-            margin: 0;
-            padding: 20px;
-        }
+    body {
+      background: linear-gradient(45deg, #5e3a03, #422801bd);
+      margin: 0;
+      padding: 20px;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-        h1 {
-            color: #2d572c;
-            font-size: 2.5em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
+    h1 {
+      color: #2d572c;
+      font-size: 2.5em;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
 
-        main {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            padding: 20px;
-        }
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      padding: 20px;
+    }
 
-        .image-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
+    .image-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
 
-        .image-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        /* تأثير تكبير خفيف على الصورة عند المرور */
-        .image-card:hover .image-img {
-            transform: scale(1.05);
-            transition: transform 0.3s ease;
-        }
+    .image-card:hover {
+      transform: translateY(-10px);
+    }
+    
+    /* تأثير تكبير خفيف على الصورة عند المرور */
+    .image-card:hover .image-img {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
 
-        .image-img {
-            width: 100%;
-            height: 500px;
-            object-fit: cover;
-            border-bottom: 3px solid #e0e0e0;
-        }
+    .image-img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      border-bottom: 3px solid #e0e0e0;
+    }
 
-        .image-info {
-            padding: 15px;
-            background: #f8f8f8;
-            text-align: center;
-        }
+    .image-info {
+      padding: 15px;
+      background: #f8f8f8;
+      text-align: center;
+    }
 
-        .image-number {
-            font-size: 1.2em;
-            color: #2d572c;
-            margin-bottom: 10px;
-        }
+    .image-number {
+      font-size: 1.2em;
+      color: #2d572c;
+      margin-bottom: 10px;
+    }
 
-        .download-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background: #2d572c;
-            color: white;
-            text-decoration: none;
-            text-align: center;
-            transition: background 0.3s ease;
-        }
+    .download-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: #2d572c;
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      transition: background 0.3s ease;
+    }
 
-        .download-btn:hover {
-            background: #1e401d;
-        }
+    .download-btn:hover {
+      background: #1e401d;
+    }
 
-        @media (max-width: 768px) {
-            main {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+      h1 {
+        font-size: 2em;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>معرض صور خلفية جوال يوم التأسيس السعودي 🇸🇦</h1>
-        </header>
-        <main>
-            <!-- البطاقة الأولى -->
-            <article class="image-card">
-                <img src="../wow/1.png" class="image-img" alt="الخلفية الأولى - صورة يوم التأسيس" loading="lazy">
-                <div class="image-info">
-                    <div class="image-number">الخلفية الأولى</div>
-                    <a href="../wow/1.png" download class="download-btn">تنزيل الصورة</a>
-                </div>
-            </article>
-            
-            <!-- البطاقة الثانية -->
-            <article class="image-card">
-                <img src="../wow/2.png" class="image-img" alt="الخلفية الثانية - صورة يوم التأسيس" loading="lazy">
-                <div class="image-info">
-                    <div class="image-number">الخلفية الثانية</div>
-                    <a href="../wow/2.png" download class="download-btn">تنزيل الصورة</a>
-                </div>
-            </article>
-            
-            <!-- البطاقة الثالثة -->
-            <article class="image-card">
-                <img src="../wow/3.png" class="image-img" alt="الخلفية الثالثة - صورة يوم التأسيس" loading="lazy">
-                <div class="image-info">
-                    <div class="image-number">الخلفية الثالثة</div>
-                    <a href="../wow/3.png" download class="download-btn">تنزيل الصورة</a>
-                </div>
-            </article>
-            
-            <!-- البطاقة الرابعة -->
-            <article class="image-card">
-                <img src="../wow/4.png" class="image-img" alt="الخلفية الرابعة - صورة يوم التأسيس" loading="lazy">
-                <div class="image-info">
-                    <div class="image-number">الخلفية الرابعة</div>
-                    <a href="../wow/4.png" download class="download-btn">تنزيل الصورة</a>
-                </div>
-            </article>
-            
-            <!-- البطاقة الخامسة -->
-            <article class="image-card">
-                <img src="../wow/5.png" class="image-img" alt="الخلفية الخامسة - صورة يوم التأسيس" loading="lazy">
-                <div class="image-info">
-                    <div class="image-number">الخلفية الخامسة</div>
-                    <a href="../wow/5.png" download class="download-btn">تنزيل الصورة</a>
-                </div>
-            </article>
-            
-            <!-- البطاقة السادسة -->
-            <article class="image-card">
-                <img src="../wow/6.png" class="image-img" alt="الخلفية السادسة - صورة يوم التأسيس" loading="lazy">
-                <div class="image-info">
-                    <div class="image-number">الخلفية السادسة</div>
-                    <a href="../wow/6.png" download class="download-btn">تنزيل الصورة</a>
-                </div>
-            </article>
-            
-            <!-- البطاقة السابعة -->
-            <article class="image-card">
-                <img src="../wow/7.png" class="image-img" alt="الخلفية السابعة - صورة يوم التأسيس" loading="lazy">
-                <div class="image-info">
-                    <div class="image-number">الخلفية السابعة</div>
-                    <a href="../wow/7.png" download class="download-btn">تنزيل الصورة</a>
-                </div>
-            </article>
-            
-            <!-- البطاقة الثامنة -->
-            <article class="image-card">
-                <img src="../wow/8.png" class="image-img" alt="الخلفية الثامنة - صورة يوم التأسيس" loading="lazy">
-                <div class="image-info">
-                    <div class="image-number">الخلفية الثامنة</div>
-                    <a href="../wow/8.png" download class="download-btn">تنزيل الصورة</a>
-                </div>
-            </article>
-            
-            <!-- البطاقة التاسعة -->
-            <article class="image-card">
-                <img src="../wow/9.png" class="image-img" alt="الخلفية التاسعة - صورة يوم التأسيس" loading="lazy">
-                <div class="image-info">
-                    <div class="image-number">الخلفية التاسعة</div>
-                    <a href="../wow/9.png" download class="download-btn">تنزيل الصورة</a>
-                </div>
-            </article>
-            
-            <!-- البطاقة العاشرة -->
-            <article class="image-card">
-                <img src="../wow/10.png" class="image-img" alt="الخلفية العاشرة - صورة يوم التأسيس" loading="lazy">
-                <div class="image-info">
-                    <div class="image-number">الخلفية العاشرة</div>
-                    <a href="../wow/10.png" download class="download-btn">تنزيل الصورة</a>
-                </div>
-            </article>
-            <!-- البطاقة 11 -->
-<article class="image-card">
-    <img src="../wow/11.png" class="image-img" alt="قصيدة تأسيسية بخط اليد" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية أحد عشرة </div>
-        <a href="../wow/11.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 19 -->
-<article class="image-card">
-    <img src="../wow/12.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية أثنا عشرة</div>
-        <a href="../wow/12.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-<!-- البطاقة 19 -->
-<article class="image-card">
-    <img src="../wow/12.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية ثلاثة عشر</div>
-        <a href="../wow/12.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 21 -->
-<article class="image-card">
-    <img src="../wow/15.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية خمسة عشر</div>
-        <a href="../wow/15.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 22 -->
-<article class="image-card">
-    <img src="../wow/16.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية ستة عشر</div>
-        <a href="../wow/16.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 23 -->
-<article class="image-card">
-    <img src="../wow/17.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية سبعة عشر</div>
-        <a href="../wow/17.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 24 -->
-<article class="image-card">
-    <img src="../wow/18.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية ثمانية عشر</div>
-        <a href="../wow/18.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 25 -->
-<article class="image-card">
-    <img src="../wow/19.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية تسعة عشر</div>
-        <a href="../wow/19.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 26 -->
-<article class="image-card">
-    <img src="../wow/20.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية عشرون</div>
-        <a href="../wow/20.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 27 -->
-<article class="image-card">
-    <img src="../wow/21.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية واحد وعشرون</div>
-        <a href="../wow/21.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 28 -->
-<article class="image-card">
-    <img src="../wow/22.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية اثنان وعشرون</div>
-        <a href="../wow/22.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 29 -->
-<article class="image-card">
-    <img src="../wow/23.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية ثلاثة وعشرون</div>
-        <a href="../wow/23.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 30 -->
-<article class="image-card">
-    <img src="../wow/24.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية أربعة وعشرون</div>
-        <a href="../wow/24.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
-<!-- البطاقة 31 -->
-<article class="image-card">
-    <img src="../wow/25.png" class="image-img" alt="تواريخ تأسيس المملكة" loading="lazy">
-    <div class="image-info">
-        <div class="image-number">الخلفية خمسة وعشرون</div>
-        <a href="../wow/25.png" download class="download-btn">تنزيل الصورة</a>
-    </div>
-</article>
-
+  <div class="container">
+    <header>
+      <h1>معرض صور خلفية جوال يوم التأسيس السعودي 🇸🇦</h1>
+    </header>
+    <main>
+      <!-- سيتم إضافة بطاقات الصور ديناميكيًا بواسطة جافاسكريبت -->
+    </main>
+  </div>
+  
+  <script>
+    const main = document.querySelector("main");
+    const totalImages = 25; // إجمالي عدد الخلفيات
+    for (let i = 1; i <= totalImages; i++) {
+      const imgSrc = `../wow/${i}.png`;
+      const imgAlt = `الخلفية ${i} - صورة يوم التأسيس`;
+      const card = `
+        <article class="image-card">
+          <img src="${imgSrc}" class="image-img" alt="${imgAlt}" loading="lazy">
+          <div class="image-info">
+            <div class="image-number">الخلفية ${i}</div>
+            <a href="${imgSrc}" download class="download-btn">تنزيل الصورة</a>
+          </div>
+        </article>
+      `;
+      main.innerHTML += card;
+    }
+  </script>
+</body>
+</html>
